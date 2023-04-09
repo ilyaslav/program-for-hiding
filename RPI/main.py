@@ -13,45 +13,48 @@ class PiHandler():
 
 	def sensors_loop(self):
 		while True:
-			if GPIO.input(3) != self.sensor_btRS:
-				self.sensor_btRS = GPIO.input(3)
-				if self.sensor_btRS:
-					client.server[0].send("RS0;".encode('utf-8'))
-				else:
-					client.server[0].send("RS1;".encode('utf-8'))
+			try:
+				if GPIO.input(3) != self.sensor_btRS:
+					self.sensor_btRS = GPIO.input(3)
+					if self.sensor_btRS:
+						client.server[0].send("RS0;".encode('utf-8'))
+					else:
+						client.server[0].send("RS1;".encode('utf-8'))
 
-			if GPIO.input(5) != self.sensor_fans[0]:
-				self.sensor_fans[0] = GPIO.input(5)
-				if self.sensor_fans[0]:
-					client.server[0].send("F10;".encode('utf-8'))
-				else:
-					client.server[0].send("F11;".encode('utf-8'))
+				if GPIO.input(5) != self.sensor_fans[0]:
+					self.sensor_fans[0] = GPIO.input(5)
+					if self.sensor_fans[0]:
+						client.server[0].send("F10;".encode('utf-8'))
+					else:
+						client.server[0].send("F11;".encode('utf-8'))
 
-			if GPIO.input(7) != self.sensor_fans[1]:
-				self.sensor_fans[1] = GPIO.input(7)
-				if self.sensor_fans[1]:
-					client.server[0].send("F20;".encode('utf-8'))
-				else:
-					client.server[0].send("F21;".encode('utf-8'))
-
-
-			if GPIO.input(11) != self.sensor_fans[2]:
-				self.sensor_fans[2] = GPIO.input(11)
-				if self.sensor_fans[2]:
-					client.server[0].send("F30;".encode('utf-8'))
-				else:
-					client.server[0].send("F31;".encode('utf-8'))
+				if GPIO.input(7) != self.sensor_fans[1]:
+					self.sensor_fans[1] = GPIO.input(7)
+					if self.sensor_fans[1]:
+						client.server[0].send("F20;".encode('utf-8'))
+					else:
+						client.server[0].send("F21;".encode('utf-8'))
 
 
-			if GPIO.input(13) != self.sensor_fans[3]:
-				self.sensor_fans[3] = GPIO.input(13)
-				if self.sensor_fans[3]:
-					client.server[0].send("F40;".encode('utf-8'))
-				else:
-					client.server[0].send("F41;".encode('utf-8'))
+				if GPIO.input(11) != self.sensor_fans[2]:
+					self.sensor_fans[2] = GPIO.input(11)
+					if self.sensor_fans[2]:
+						client.server[0].send("F30;".encode('utf-8'))
+					else:
+						client.server[0].send("F31;".encode('utf-8'))
 
 
-			time.sleep(0.1)
+				if GPIO.input(13) != self.sensor_fans[3]:
+					self.sensor_fans[3] = GPIO.input(13)
+					if self.sensor_fans[3]:
+						client.server[0].send("F40;".encode('utf-8'))
+					else:
+						client.server[0].send("F41;".encode('utf-8'))
+
+
+				time.sleep(0.1)
+			except:
+				pass
 			
 def set_GPIO_settings():
 	GPIO.setmode(GPIO.BOARD)
