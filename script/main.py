@@ -6,6 +6,12 @@ import time
 import random
 from TimeBox import TimeBox
 
+from kivy.config import Config
+Config.set('graphics', 'fullscreen', 'auto')
+Config.set('graphics', 'window_state', 'maximized')
+Config.set('input', 'mouse', 'mouse,disable_multitouch')
+Config.write()
+
 import kivy
 from kivy.app import App
 
@@ -18,9 +24,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
 from kivy.core.audio import SoundLoader
-
-from kivy.core.window import Window
-from kivy.config import Config
 
 from kivy.clock import Clock
 from functools import partial
@@ -2232,10 +2235,7 @@ class MyApp(App):
 
 
 if __name__ == "__main__":
-	Config.set('graphics', 'fullscreen', 'auto')
-	Config.set('graphics', 'window_state', 'maximized')
-	Config.write()
-	Window.fullscreen = True
+	#Window.fullscreen = True
 	
 	s = Server()
 	threading.Thread(target=s.serverFunction, daemon=True).start()
