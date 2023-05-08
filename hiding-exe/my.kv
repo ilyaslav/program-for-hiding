@@ -1,0 +1,797 @@
+
+
+
+<Widget>:
+	color: "000000ff"
+	#background_normal: ''
+
+
+
+<CenteredTextInput@TextInput>:
+	font_size: 100
+    multiline: False
+    on_text: root.update_padding()
+    padding_x: (self.width - self.text_width) / 2
+    padding_y: (self.height-self.line_height)/2
+
+
+
+<GridL>:
+	spacing: 30
+
+
+
+<Label>:
+	font_size: self.height/4
+
+
+
+<Button>:
+	background_normal: ""
+	font_size: self.height/3
+	halign: 'center'
+
+
+<Tab>:
+	#size_hint: .9, .9
+	pos_hint: {"center_x": .5, "center_y": .5}
+	do_default_tab: False
+	background_image: "image.jpg"
+
+
+
+	bt_script1: bt_script1
+	bt_script2: bt_script2
+	bt_script3: bt_script3
+	bt_script4: bt_script4
+
+	bt_UVlamps: bt_UVlamps
+	bt_UVsec1: bt_UVsec1
+	bt_UVsec2: bt_UVsec2
+	bt_UVsec3: bt_UVsec3
+	bt_UVkids: bt_UVkids
+
+	bt_fans: bt_fans
+
+	bt_strobes: bt_strobes
+
+	bt_settings: bt_settings
+	bt_diagnostics: bt_diagnostics
+
+	bt_RUNSTOP: bt_RUNSTOP
+	bt_reset: bt_reset
+
+	bt_5min: bt_5min
+	bt_8min: bt_8min
+	bt_10min: bt_10min
+	bt_12min: bt_12min
+	bt_15min: bt_15min
+	bt_18min: bt_18min
+
+	time_panel: time_panel
+
+	sensRS: sensRS
+	sens1: sens1
+	sens2: sens2
+	sens3: sens3
+	sens4: sens4
+
+	runstop_off: runstop_off
+	runstop_on: runstop_on
+
+	shadow_off: shadow_off
+	shadow_on: shadow_on
+
+	strobe1_off: strobe1_off
+	strobe2_off: strobe2_off
+	strobe3_off: strobe3_off
+	strobe1_on: strobe1_on
+	strobe2_on: strobe2_on
+	strobe3_on: strobe3_on
+
+	fan1_off: fan1_off
+	fan2_off: fan2_off
+	fan3_off: fan3_off
+	fan4_off: fan4_off
+	fan1_on: fan1_on
+	fan2_on: fan2_on
+	fan3_on: fan3_on
+	fan4_on: fan4_on
+
+	uv1_off: uv1_off
+	uv2_off: uv2_off
+	uv3_off: uv3_off
+	uv4_off: uv4_off
+	uv5_off: uv5_off
+	uv6_off: uv6_off
+	uv7_off: uv7_off
+	uv8_off: uv8_off
+	uv9_off: uv9_off
+	uv1_on: uv1_on  
+	uv2_on: uv2_on 
+	uv3_on: uv3_on 
+	uv4_on: uv4_on 
+	uv5_on: uv5_on 
+	uv6_on: uv6_on 
+	uv7_on: uv7_on 
+	uv8_on: uv8_on 
+	uv9_on: uv9_on
+
+	exit: exit 
+
+
+
+	TabbedPanelItem:
+		text: "Для оператора"
+
+		BoxLayout:
+			orientation: "vertical"
+			padding: 30
+
+
+
+			BoxLayout:
+				size_hint_y: .2
+				padding: (self.height / 5, self.height / 4)
+				spacing: 30
+
+				Button:
+					id: bt_script1
+					text: "Прятки в темноте"
+					background_color: "00ff00ff"
+					on_press: root.bt_script1_press()
+
+				Button:
+					id: bt_script2
+					text: "Поиск душ"
+					on_press: root.bt_script2_press()
+
+				Button:
+					id: bt_script3
+					text: "Сценарий1"
+					disabled: True
+					on_press: root.bt_script3_press()
+
+				Button:
+					id: bt_script4
+					text: "Сценарий2"
+					disabled: True
+					on_press: root.bt_script4_press()
+
+
+
+			BoxLayout:
+				size_hint_y: .4
+				padding: (self.height / 10, self.height / 8)
+				spacing: 30
+
+				GridL:
+					cols: 1
+
+					Button:
+						id: bt_UVlamps
+						text: "УФ освещение"
+						on_press: root.bt_UVlamps_press()
+
+
+					GridL:
+						cols: 3
+
+						Button:
+							id: bt_UVsec1
+							text: "1"
+							on_press: root.bt_UVsec1_press()
+
+						Button:
+							id: bt_UVsec2
+							text: "2"
+							on_press: root.bt_UVsec2_press()
+
+						Button:
+							id: bt_UVsec3
+							text: "3"
+							on_press: root.bt_UVsec3_press()
+
+					Button:
+						id: bt_UVkids
+						text: "Для детей"
+						on_press: root.bt_UVkids_press()
+
+
+				GridL:
+					rows: 3
+
+					Button:
+						id: bt_fans
+						text: "Вентиляторы"
+						on_press: root.bt_fans_press()
+
+					Widget:
+
+					Widget:
+
+
+				GridL:
+					rows: 3
+
+					Button:
+						id: bt_strobes
+						text: "Стробоскопы"
+						on_press: root.bt_strobes_press()
+
+					Widget:
+
+					Widget:
+
+
+				GridL:
+					rows: 3
+
+					Button:
+						id: bt_settings
+						text: "Ручное управление"
+						on_press: root.bt_settings_press()
+
+					Widget:
+
+					Widget:
+
+
+
+			BoxLayout:
+				size_hint_y: .4
+				padding: (self.height / 10, self.height / 8)
+				spacing: 30
+
+				Button:
+					id: bt_RUNSTOP
+					text: "RUN/\nSTOP"
+					background_color: 'ff0000ff'
+					on_press: root.bt_RUNSTOP_press()
+
+
+				BoxLayout:
+					orientation: "vertical"
+
+					Label:
+						text: "Время"
+						color: "ffffffff"
+
+					GridLayout:
+						spacing: 20
+						cols: 3
+
+						Button:
+							id: bt_5min
+							text: "5 мин"
+							on_press: root.bt_5min_press()
+
+						Button:
+							id: bt_8min
+							text: "8 мин"
+							on_press: root.bt_8min_press()
+
+						Button:
+							id: bt_10min
+							text: "10 мин"
+							background_color: 'ffff00ff'
+							on_press: root.bt_10min_press()
+
+						Button:
+							id: bt_12min
+							text: "12 мин"
+							on_press: root.bt_12min_press()
+
+						Button:
+							id: bt_15min
+							text: "15 мин"
+							on_press: root.bt_15min_press()
+
+						Button:
+							id: bt_18min
+							text: "18 мин"
+							on_press: root.bt_18min_press()
+
+
+				BoxLayout:
+					orientation: "vertical"
+
+					Label:
+						text: "Обратный отсчет"
+						color: "ffffffff"
+
+					CenteredTextInput:
+						id: time_panel
+						text: "10:00"
+						on_text: root.change_time()
+
+
+				Button:
+					id: bt_reset
+					text: "Сброс"
+					background_color: 'ff0000ff'
+					on_press: root.bt_reset_press()
+
+
+
+
+	TabbedPanelItem:
+		id: bt_diagnostics
+		text: "Диагностика"
+		disabled: False
+
+		BoxLayout:
+			spacing: 50
+
+			BoxLayout:
+				spacing: 50
+				size_hint_x: 0.3
+				padding: (50, 150, 50, 150)
+				orientation: 'vertical'
+
+				Button:
+					id: sensRS
+					text: "RUN/STOP"
+					disabled: True
+
+				Button:
+					id: sens1
+					text: "Датчик 1"
+					disabled: True
+
+				Button:
+					id: sens2
+					text: "Датчик 2"
+					disabled: True
+
+				Button:
+					id: sens3
+					text: "Датчик 3"
+					disabled: True
+
+				Button:
+					id: sens4
+					text: "Датчик 4"
+					disabled: True
+
+
+			GridLayout:
+				size_hint_x: 0.7
+				cols: 5
+				padding: (0, 150, 50, 150)
+				spacing: 30
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Лампа\n"Пуск"'
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: runstop_off 
+							on_press: root.bt_runstop_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button:
+							id: runstop_on 
+							on_press: root.bt_runstop_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Лампа\n"Тени"'
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: shadow_off
+							on_press: root.bt_shadow_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: shadow_on
+							on_press: root.bt_shadow_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Стробоскоп\n1'
+						background_color: "ff0000ff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: strobe1_off
+							on_press: root.bt_strobe1_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: strobe1_on
+							on_press: root.bt_strobe1_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Стробоскоп\n2'
+						background_color: "ff0000ff"
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: strobe2_off
+							on_press: root.bt_strobe2_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button:
+							id: strobe2_on
+							on_press: root.bt_strobe2_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Стробоскоп\n3'
+						background_color: "ff0000ff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: strobe3_off
+							on_press: root.bt_strobe3_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button:
+							id: strobe3_on
+							on_press: root.bt_strobe3_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Вентилятор\n1'
+						background_color: "0f93ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: fan1_off
+							on_press: root.bt_fan1_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button:
+							id: fan1_on
+							on_press: root.bt_fan1_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Вентилятор\n2'
+						background_color: "0f93ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: fan2_off
+							on_press: root.bt_fan2_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: fan2_on
+							on_press: root.bt_fan2_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Вентилятор\n3'
+						background_color: "0f93ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: fan3_off
+							on_press: root.bt_fan3_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: fan3_on
+							on_press: root.bt_fan3_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'Вентилятор\n4'
+						background_color: "0f93ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: fan4_off
+							on_press: root.bt_fan4_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: fan4_on
+							on_press: root.bt_fan4_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 1'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button:
+							id: uv1_off 
+							on_press: root.bt_uv1_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv1_on 
+							on_press: root.bt_uv1_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 2'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv2_off 
+							on_press: root.bt_uv2_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv2_on 
+							on_press: root.bt_uv2_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 3'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv3_off 
+							on_press: root.bt_uv3_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv3_on 
+							on_press: root.bt_uv3_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 4'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv4_off 
+							on_press: root.bt_uv4_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv4_on
+							on_press: root.bt_uv4_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 5'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv5_off 
+							on_press: root.bt_uv5_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv5_on 
+							on_press: root.bt_uv5_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 6'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv6_off 
+							on_press: root.bt_uv6_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv6_on 
+							on_press: root.bt_uv6_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 7'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv7_off 
+							on_press: root.bt_uv7_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv7_on
+							on_press: root.bt_uv7_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 8'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv8_off 
+							on_press: root.bt_uv8_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv8_on 
+							on_press: root.bt_uv8_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+				BoxLayout:
+					orientation: "vertical"
+					spacing: 15
+
+					Button:
+						text: 'УФП 9'
+						background_color: "6b00ffff"
+
+					BoxLayout:
+						spacing: 15
+
+						Button: 
+							id: uv9_off 
+							on_press: root.bt_uv9_press()
+							background_disabled_normal: "red.jpg"
+							background_normal: "off.jpg"
+
+						Button: 
+							id: uv9_on 
+							on_press: root.bt_uv9_press()
+							background_disabled_normal: "green.jpg"
+							background_normal: "on.jpg"
+
+
+	TabbedPanelItem:
+		id: exit
+		text: "Выход"
+		on_press: root.exit()
+		background_color: 'ff0000ff'
