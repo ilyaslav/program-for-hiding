@@ -191,36 +191,36 @@ class MyWindow(Ui_MainWindow):
     def bt_UVkids_press(self):
         settings.for_kids = not settings.for_kids
         if settings.for_kids:
-            settings.UV_activation_time = settings.timebox.t22
+            settings.UV_activation_time = settings.timebox['t43']
         else:
-            settings.UV_activation_time = settings.timebox.t21
+            settings.UV_activation_time = settings.timebox['t42']
         self.refresh_settings_buttons()
 
     def bt_UVsec1_press(self):
         if settings.bonuses['UVlamps']:
             settings.timeUV_bt[0] = not settings.timeUV_bt[0]
             if settings.timeUV_bt[0]:
-                settings.bonus_time += settings.timebox.t12
+                settings.bonus_time += settings.timebox['t12']
             else:
-                settings.bonus_time -= settings.timebox.t12
+                settings.bonus_time -= settings.timebox['t12']
             self.refresh_settings_buttons()
 
     def bt_UVsec2_press(self):
         if settings.bonuses['UVlamps']:
             settings.timeUV_bt[1] = not settings.timeUV_bt[1]
             if settings.timeUV_bt[1]:
-                settings.bonus_time += settings.timebox.t13
+                settings.bonus_time += settings.timebox['t13']
             else:
-                settings.bonus_time -= settings.timebox.t13
+                settings.bonus_time -= settings.timebox['t13']
             self.refresh_settings_buttons()
 
     def bt_UVsec3_press(self):
         if settings.bonuses['UVlamps']:
             settings.timeUV_bt[2] = not settings.timeUV_bt[2]
             if settings.timeUV_bt[2]:
-                settings.bonus_time += settings.timebox.t14
+                settings.bonus_time += settings.timebox['t14']
             else:
-                settings.bonus_time -= settings.timebox.t14
+                settings.bonus_time -= settings.timebox['t14']
             self.refresh_settings_buttons()
 
     def bt_fans_press(self):

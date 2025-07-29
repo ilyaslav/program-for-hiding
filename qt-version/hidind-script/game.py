@@ -62,7 +62,7 @@ def check_start():
         settings.game_status = True
 
     if settings.game_status:
-        if settings.timebox.t1 < time.time() - settings.start_run_time < settings.timebox.t1 + 0.2:
+        if settings.timebox['t1'] < time.time() - settings.start_run_time < settings.timebox['t1'] + 0.2:
             settings.game_status = False
             settings.start_run_time = -1
             return True
@@ -76,7 +76,7 @@ def check_start():
 
 def check_fans():
     for i in range(4):
-        if not settings.inputs['fans'][i] and time.time() - settings.fans_run_time[i] > settings.timebox.t17:
+        if not settings.inputs['fans'][i] and time.time() - settings.fans_run_time[i] > settings.timebox['t17']:
             settings.order_fans[i]+=1
             settings.fans_run_time[i] = time.time()
 
@@ -104,7 +104,7 @@ def init_game():
     if settings.runstop:
         if settings.scripts == 0:
             settings.start_event = True
-            start_game(settings.timebox.t2)
+            start_game(settings.timebox['t2'])
             try:
                 s.connection[0].send("MG1;".encode('utf-8'))
             except:
@@ -142,16 +142,16 @@ def start_game(dt):
         if settings.runstop:
             settings.strobe_music_event = True
             settings.strobe_event = True
-            strobe_music_play(settings.timebox.t19 - settings.timebox.t20)
-            strobe_activation(settings.timebox.t19)
+            strobe_music_play(settings.timebox['t19'] - settings.timebox['t20'])
+            strobe_activation(settings.timebox['t19'])
 
             if settings.scripts == 0:
                 settings.shadow_lamp_enent = True
-                shadow_lamp_activation(settings.time_m*60 + settings.time_s - settings.timebox.t4)
+                shadow_lamp_activation(settings.time_m*60 + settings.time_s - settings.timebox['t4'])
 
             elif settings.scripts == 1:
                 settings.shadow_lamp_enent = True
-                shadow_lamp_activation(settings.time_m*60 + settings.time_s - settings.timebox.t9)
+                shadow_lamp_activation(settings.time_m*60 + settings.time_s - settings.timebox['t9'])
     except Exception as e:
         print(e)
 @thread_wraper
@@ -969,7 +969,7 @@ def shadow_lamp_activation(dt):
         if dt <= 0:
             break
     action_shadow_lamp(0)
-    shadow_lamp_activation(settings.timebox.t10)
+    shadow_lamp_activation(settings.timebox['t10'])
 @thread_wraper
 def strobe_activation(dt):
     while True:
@@ -985,37 +985,37 @@ def strobe_activation(dt):
             settings.order_strobe+=1
             if settings.bonuses['strobes']:
                 action_strobe1(0)
-                action_strobe1(settings.timebox.t18)
+                action_strobe1(settings.timebox['t18'])
 
-            if (settings.time_m*60 + settings.time_s) - settings.timebox.t19 > 5:
+            if (settings.time_m*60 + settings.time_s) - settings.timebox['t19'] > 5:
                 settings.strobe_music_event = True
                 settings.strobe_event = True
-                strobe_music_play(settings.timebox.t19 - settings.timebox.t20)
-                strobe_activation(settings.timebox.t19)
+                strobe_music_play(settings.timebox['t19'] - settings.timebox['t20'])
+                strobe_activation(settings.timebox['t19'])
 
         elif settings.order_strobe == 2:
             settings.order_strobe+=1
             if settings.bonuses['strobes']:
                 action_strobe2(0)
-                action_strobe2(settings.timebox.t18)
+                action_strobe2(settings.timebox['t18'])
 
-            if (settings.time_m*60 + settings.time_s) - settings.timebox.t19 > 5:
+            if (settings.time_m*60 + settings.time_s) - settings.timebox['t19'] > 5:
                 settings.strobe_music_event = True
                 settings.strobe_event = True
-                strobe_music_play(settings.timebox.t19 - settings.timebox.t20)
-                strobe_activation(settings.timebox.t19)
+                strobe_music_play(settings.timebox['t19'] - settings.timebox['t20'])
+                strobe_activation(settings.timebox['t19'])
 
         elif settings.order_strobe == 3:
             settings.order_strobe=1
             if settings.bonuses['strobes']:
                 action_strobe3(0)
-                action_strobe3(settings.timebox.t18)
+                action_strobe3(settings.timebox['t18'])
 
-            if (settings.time_m*60 + settings.time_s) - settings.timebox.t19 > 5:
+            if (settings.time_m*60 + settings.time_s) - settings.timebox['t19'] > 5:
                 settings.strobe_music_event = True
                 settings.strobe_event = True
-                strobe_music_play(settings.timebox.t19 - settings.timebox.t20)
-                strobe_activation(settings.timebox.t19)
+                strobe_music_play(settings.timebox['t19'] - settings.timebox['t20'])
+                strobe_activation(settings.timebox['t19'])
 @thread_wraper
 def timer_run(dt):
     while True:

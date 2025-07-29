@@ -1,6 +1,9 @@
-from TimeBox import TimeBox
+from database import Database
 
-timebox = TimeBox("Интервалы времени.txt")
+db = Database("settings.db")
+timebox = db.select_times()
+volumes = db.select_volumes()
+
 scripts = 0
 timer = "10:00"
 time = "10:00"
@@ -9,7 +12,7 @@ time_s = 0
 
 pressed_time = 0
 timeUV_bt = [False, False, False]
-UV_activation_time = timebox.t21
+UV_activation_time = timebox['t42']
 
 order = 1
 order_strobe = 1
