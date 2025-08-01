@@ -19,7 +19,7 @@ class Music():
 				else:
 					music[1].play()
 			else:
-				self.tracks[track] = [True, AudioPlayer(f'/home/user/Desktop/RPI1/mp3/{track}.mp3')]
+				self.tracks[track] = [True, AudioPlayer(f'/home/user/Desktop/RPI2/mp3/{track}.mp3')]
 				self.tracks[track][1].play()
 		except:
 			pass

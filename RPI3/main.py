@@ -10,7 +10,7 @@ class GameHandler(PiHandler):
         super().__init__()
         self.client = Client(self.sendInputs, self.messageHandler)
         self.gm = Music()
-        self.rsb_name = 'r1'
+        self.rsb_name = 'r3'
 
     def messageHandler(self, message: str):
         rpi, command, value =  message.split(":")
