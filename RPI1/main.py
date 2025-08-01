@@ -10,11 +10,12 @@ class GameHandler(PiHandler):
         super().__init__()
         self.client = Client(self.sendInputs, self.messageHandler)
         self.gm = Music()
+        self.rsb_name = 'r1'
 
     def messageHandler(self, message: str):
         rpi, command, value =  message.split(":")
 
-        if rpi != 'r1':
+        if rpi != self.rsb_name:
             return
         
         if command.__contains__('x'):
@@ -35,7 +36,7 @@ class GameHandler(PiHandler):
     def sendInputs(self):
         inputs = PiHandler.getInputs()
         for inputName in inputs:
-            self.client.sendMessage(f'{inputName}:{int(inputs[inputName])};')
+            self.client.sendMessage(f'{self.rsb_name}:{inputName}:{int(inputs[inputName])};')
 
 
 def main():
