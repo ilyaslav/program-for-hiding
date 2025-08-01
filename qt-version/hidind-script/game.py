@@ -4,8 +4,33 @@ import random
 
 import settings
 from server import Server
-s = Server()
-threading.Thread(target=s.serverFunction, daemon=True).start()
+
+class GameServer(Server): # TODO
+    def message_handler(mes: str):
+        if mes == 'F10':
+            settings.inputs['fans'][0] = True
+        elif mes == 'F11':
+            settings.inputs['fans'][0] = False
+        elif mes == 'F20':
+            settings.inputs['fans'][1] = True
+        elif mes == 'F21':
+            settings.inputs['fans'][1] = False
+        elif mes == 'F30':
+            settings.inputs['fans'][2] = True
+        elif mes == 'F31':
+            settings.inputs['fans'][2] = False
+        elif mes == 'F40':
+            settings.inputs['fans'][3] = True
+        elif mes == 'F41':
+            settings.inputs['fans'][3] = False
+
+        elif mes == 'RS0':
+            settings.inputs['runstop'] = True
+        elif mes == 'RS1':
+            settings.inputs['runstop'] = False
+
+game_server = Server()
+threading.Thread(target=game_server.start_server, daemon=True).start()
 
 def thread_wraper(func):
     def wraper(*args, **kwargs):
@@ -106,7 +131,7 @@ def init_game():
             settings.start_event = True
             start_game(settings.timebox['t2'])
             try:
-                s.connection[0].send("MG1;".encode('utf-8'))
+                play_music("r1", 1)
             except:
                 pass
         elif settings.scripts == 1:
@@ -161,10 +186,10 @@ def action_runstop_lamp(dt):
         settings.outs['RunStopLamp'] = not settings.outs['RunStopLamp']
         if settings.outs['RunStopLamp']:
             print("on RunStopLamp")
-            s.connection[0].send("RS1;".encode('utf-8'))
+            game_server.send_message("r1:y1:1;")
         else:
             print("off RunStopLamp")
-            s.connection[0].send("RS0;".encode('utf-8'))
+            game_server.send_message("r1:y1:0;")
     except:
         settings.outs['RunStopLamp'] = not settings.outs['RunStopLamp']
 @thread_wraper
@@ -174,10 +199,10 @@ def action_shadow_lamp(dt):
         settings.outs['ShadowLamp'] = not settings.outs['ShadowLamp']
         if settings.outs['ShadowLamp']:
             print("on ShadowLamp")
-            s.connection[0].send("SL1;".encode('utf-8'))
+            game_server.send_message("r1:y2:1;")
         else:
             print("off ShadowLamp")
-            s.connection[0].send("SL0;".encode('utf-8'))
+            game_server.send_message("r1:y2:0;")
     except:
         settings.outs['ShadowLamp'] = not settings.outs['ShadowLamp']
 @thread_wraper
@@ -187,10 +212,10 @@ def action_shadow(dt):
         settings.outs['Souls'] = not settings.outs['Souls']
         if settings.outs['Souls']:
             print("on shadow")
-            s.connection[0].send("SH1;".encode('utf-8'))
+            game_server.send_message("r1:y19:1;")
         else:
             print("off shadow")
-            s.connection[0].send("SH0;".encode('utf-8'))
+            game_server.send_message("r1:y19:0;")
     except:
         settings.outs['Souls'] = not settings.outs['Souls']
 @thread_wraper
@@ -200,13 +225,13 @@ def action_strobe1(dt):
         settings.outs['Strobes'][0] = not settings.outs['Strobes'][0]
         if settings.outs['Strobes'][0]:
             print("on strobe1")
-            s.connection[0].send("S11;".encode('utf-8'))
+            game_server.send_message("r1:y16:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off strobe1")
-            s.connection[0].send("S10;".encode('utf-8'))
+            game_server.send_message("r1:y16:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Strobes'][0] = not settings.outs['Strobes'][0]
@@ -217,13 +242,13 @@ def action_strobe2(dt):
         settings.outs['Strobes'][1] = not settings.outs['Strobes'][1]
         if settings.outs['Strobes'][1]:
             print("on strobe2")
-            s.connection[0].send("S21;".encode('utf-8'))
+            game_server.send_message("r1:y17:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off strobe2")
-            s.connection[0].send("S20;".encode('utf-8'))
+            game_server.send_message("r1:y17:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Strobes'][1] = not settings.outs['Strobes'][1]
@@ -234,13 +259,13 @@ def action_strobe3(dt):
         settings.outs['Strobes'][2] = not settings.outs['Strobes'][2]
         if settings.outs['Strobes'][2]:
             print("on strobe3")
-            s.connection[0].send("S31;".encode('utf-8'))
+            game_server.send_message("r1:y18:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off strobe3")
-            s.connection[0].send("S30;".encode('utf-8'))
+            game_server.send_message("r1:y18:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Strobes'][2] = not settings.outs['Strobes'][2]
@@ -252,13 +277,13 @@ def action_fan1(dt):
 
         if settings.outs['Fans'][0]:
             print("on fan1")
-            s.connection[0].send("F11;".encode('utf-8'))
+            game_server.send_message("r1:y12:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off fan1")
-            s.connection[0].send("F10;".encode('utf-8'))
+            game_server.send_message("r1:y12:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Fans'][0] = not settings.outs['Fans'][0]
@@ -270,13 +295,13 @@ def action_fan2(dt):
 
         if settings.outs['Fans'][1]:
             print("on fan2")
-            s.connection[0].send("F21;".encode('utf-8'))
+            game_server.send_message("r1:y13:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off fan2")
-            s.connection[0].send("F20;".encode('utf-8'))
+            game_server.send_message("r1:y13:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Fans'][1] = not settings.outs['Fans'][1]
@@ -288,13 +313,13 @@ def action_fan3(dt):
 
         if settings.outs['Fans'][2]:
             print("on fan3")
-            s.connection[0].send("F31;".encode('utf-8'))
+            game_server.send_message("r1:y14:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off fan3")
-            s.connection[0].send("F30;".encode('utf-8'))
+            game_server.send_message("r1:y14:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Fans'][2] = not settings.outs['Fans'][2]
@@ -306,13 +331,13 @@ def action_fan4(dt):
 
         if settings.outs['Fans'][3]:
             print("on fan4")
-            s.connection[0].send("F41;".encode('utf-8'))
+            game_server.send_message("r1:y15:1;")
             settings.fan_strobe = True
             if not settings.bonuses['settings']:
                 off_UV_lamps()
         else:
             print("off fan4")
-            s.connection[0].send("F40;".encode('utf-8'))
+            game_server.send_message("r1:y15:0;")
             settings.fan_strobe = False
     except:
         settings.outs['Fans'][3] = not settings.outs['Fans'][3]
@@ -324,10 +349,10 @@ def action_uv1(dt):
             settings.outs['UVlamps'][0] = not settings.outs['UVlamps'][0]
         if settings.outs['UVlamps'][0]:
             print("on uv1")
-            s.connection[0].send("U11;".encode('utf-8'))
+            game_server.send_message("r1:y3:1;")
         elif not settings.staticUV[0]:
             print("off uv1")
-            s.connection[0].send("U10;".encode('utf-8'))
+            game_server.send_message("r1:y3:0;")
     except:
         pass
 @thread_wraper
@@ -338,10 +363,10 @@ def action_uv2(dt):
             settings.outs['UVlamps'][1] = not settings.outs['UVlamps'][1]
         if settings.outs['UVlamps'][1]:
             print("on uv2")
-            s.connection[0].send("U21;".encode('utf-8'))
+            game_server.send_message("r1:y4:1;")
         elif not settings.staticUV[1]:
             print("off uv2")
-            s.connection[0].send("U20;".encode('utf-8'))
+            game_server.send_message("r1:y4:0;")
     except:
         pass
 @thread_wraper
@@ -352,10 +377,10 @@ def action_uv3(dt):
             settings.outs['UVlamps'][2] = not settings.outs['UVlamps'][2]
         if settings.outs['UVlamps'][2]:
             print("on uv3")
-            s.connection[0].send("U31;".encode('utf-8'))
+            game_server.send_message("r1:y5:1;")
         elif not settings.staticUV[2]:
             print("off uv3")
-            s.connection[0].send("U30;".encode('utf-8'))
+            game_server.send_message("r1:y5:0;")
     except:
         pass
 @thread_wraper
@@ -366,10 +391,10 @@ def action_uv4(dt):
             settings.outs['UVlamps'][3] = not settings.outs['UVlamps'][3]
         if settings.outs['UVlamps'][3]:
             print("on uv4")
-            s.connection[0].send("U41;".encode('utf-8'))
+            game_server.send_message("r1:y6:1;")
         elif not settings.staticUV[3]:
             print("off uv4")
-            s.connection[0].send("U40;".encode('utf-8'))
+            game_server.send_message("r1:y6:0;")
     except:
         pass
 @thread_wraper
@@ -380,10 +405,10 @@ def action_uv5(dt):
             settings.outs['UVlamps'][4] = not settings.outs['UVlamps'][4]
         if settings.outs['UVlamps'][4]:
             print("on uv5")
-            s.connection[0].send("U51;".encode('utf-8'))
+            game_server.send_message("r1:y7:1;")
         elif not settings.staticUV[4]:
             print("off uv5")
-            s.connection[0].send("U50;".encode('utf-8'))
+            game_server.send_message("r1:y7:0;")
     except:
         pass
 @thread_wraper
@@ -394,10 +419,10 @@ def action_uv6(dt):
             settings.outs['UVlamps'][5] = not settings.outs['UVlamps'][5]
         if settings.outs['UVlamps'][5]:
             print("on uv6")
-            s.connection[0].send("U61;".encode('utf-8'))
+            game_server.send_message("r1:y8:1;")
         elif not settings.staticUV[5]:
             print("off uv6")
-            s.connection[0].send("U60;".encode('utf-8'))
+            game_server.send_message("r1:y8:0;")
     except:
         pass
 @thread_wraper
@@ -408,10 +433,10 @@ def action_uv7(dt):
             settings.outs['UVlamps'][6] = not settings.outs['UVlamps'][6]
         if settings.outs['UVlamps'][6]:
             print("on uv7")
-            s.connection[0].send("U71;".encode('utf-8'))
+            game_server.send_message("r1:y9:1;")
         elif not settings.staticUV[6]:
             print("off uv7")
-            s.connection[0].send("U70;".encode('utf-8'))
+            game_server.send_message("r1:y9:0;")
     except:
         pass
 @thread_wraper
@@ -422,10 +447,10 @@ def action_uv8(dt):
             settings.outs['UVlamps'][7] = not settings.outs['UVlamps'][7]
         if settings.outs['UVlamps'][7]:
             print("on uv8")
-            s.connection[0].send("U81;".encode('utf-8'))
+            game_server.send_message("r1:y10:1;")
         elif not settings.staticUV[7]:
             print("off uv8")
-            s.connection[0].send("U80;".encode('utf-8'))
+            game_server.send_message("r1:y10:0;")
     except:
         pass
 @thread_wraper
@@ -436,10 +461,10 @@ def action_uv9(dt):
             settings.outs['UVlamps'][8] = not settings.outs['UVlamps'][8]
         if settings.outs['UVlamps'][8]:
             print("on uv9")
-            s.connection[0].send("U91;".encode('utf-8'))
+            game_server.send_message("r1:y11:1;")
         elif not settings.staticUV[8]:
             print("off uv9")
-            s.connection[0].send("U90;".encode('utf-8'))
+            game_server.send_message("r1:y11:0;")
     except:
         pass
 @thread_wraper
@@ -1039,15 +1064,15 @@ def timer_run(dt):
 
         try:
             if settings.time_m == 1 and settings.time_s == 0 and settings.scripts == 1 and settings.timer != "05:00":
-                s.connection[0].send('MH1;'.encode('utf-8'))
+                play_music("r1", 16)
             elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
-                s.connection[0].send('MI1;'.encode('utf-8'))
+                play_music("r1", 17)
             elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
-                s.connection[0].send('MJ1;'.encode('utf-8'))
+                play_music("r1", 18)
             elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
-                s.connection[0].send('MK1;'.encode('utf-8'))
+                play_music("r1", 19)
             elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
-                s.connection[0].send('ML1;'.encode('utf-8'))
+                play_music("r1", 20)
         except:
             pass
 
@@ -1073,37 +1098,37 @@ def off_all():
     off_other()
 def off_other():
     try:
-        s.connection[0].send("SH0;".encode('utf-8'))
-        s.connection[0].send("RS0;".encode('utf-8'))
-        s.connection[0].send("SL0;".encode('utf-8'))
+        game_server.send_message("r1:y1:0;")
+        game_server.send_message("r1:y2:0;")
+        game_server.send_message("r1:y19:0;")
     except:
         pass
 def off_fans():
     try:
-        s.connection[0].send("F10;".encode('utf-8'))
-        s.connection[0].send("F20;".encode('utf-8'))
-        s.connection[0].send("F30;".encode('utf-8'))
-        s.connection[0].send("F40;".encode('utf-8'))
+        game_server.send_message("r1:y12:0;")
+        game_server.send_message("r1:y13:0;")
+        game_server.send_message("r1:y14:0;")
+        game_server.send_message("r1:y15:0;")
     except:
         pass
 def off_strobes():
     try:
-        s.connection[0].send("S10;".encode('utf-8'))
-        s.connection[0].send("S20;".encode('utf-8'))
-        s.connection[0].send("S30;".encode('utf-8'))
+        game_server.send_message("r1:y16:0;")
+        game_server.send_message("r1:y17:0;")
+        game_server.send_message("r1:y18:0;")
     except:
         pass
 def off_UV_lamps():
     try:
-        s.connection[0].send("U10;".encode('utf-8'))
-        s.connection[0].send("U20;".encode('utf-8'))
-        s.connection[0].send("U30;".encode('utf-8'))
-        s.connection[0].send("U40;".encode('utf-8'))
-        s.connection[0].send("U50;".encode('utf-8'))
-        s.connection[0].send("U60;".encode('utf-8'))
-        s.connection[0].send("U70;".encode('utf-8'))
-        s.connection[0].send("U80;".encode('utf-8'))
-        s.connection[0].send("U90;".encode('utf-8'))
+        game_server.send_message("r1:y3:0;")
+        game_server.send_message("r1:y4:0;")
+        game_server.send_message("r1:y5:0;")
+        game_server.send_message("r1:y6:0;")
+        game_server.send_message("r1:y7:0;")
+        game_server.send_message("r1:y8:0;")
+        game_server.send_message("r1:y9:0;")
+        game_server.send_message("r1:y10:0;")
+        game_server.send_message("r1:y11:0;")
     except:
         pass
 @thread_wraper
@@ -1122,7 +1147,7 @@ def music_play(dt):
                 if settings.order_music == 1:
                     settings.order_music+=1
 
-                    s.connection[0].send("M11;".encode('utf-8'))
+                    play_music("r1", 1)
                     settings.music_play_event = True
                     music_play(6)
 
@@ -1131,13 +1156,13 @@ def music_play(dt):
 
                     tmp = random.randint(1,4)
                     if tmp == 1:
-                        s.connection[0].send("M21;".encode('utf-8'))
+                        play_music("r1", 2)
                     elif tmp == 2:
-                        s.connection[0].send("M31;".encode('utf-8'))
+                        play_music("r1", 3)
                     elif tmp == 3:
-                        s.connection[0].send("M41;".encode('utf-8'))
+                        play_music("r1", 4)
                     elif tmp == 4:
-                        s.connection[0].send("M51;".encode('utf-8'))
+                        play_music("r1", 5)
 
                     if settings.time_m*60 + settings.time_s > 15*60:
                         settings.order_music-=1
@@ -1153,7 +1178,7 @@ def music_play(dt):
             elif settings.scripts == 1:
                 if settings.order_music == 1:
                     settings.order_music+=1
-                    s.connection[0].send("M71;".encode('utf-8'))
+                    play_music("r1", 7)
                     settings.music_play_event = True
                     music_play(11)
 
@@ -1161,13 +1186,13 @@ def music_play(dt):
                     settings.order_music+=1
                     tmp = random.randint(1,4)
                     if tmp == 1:
-                        s.connection[0].send("M81;".encode('utf-8'))
+                        play_music("r1", 8)
                     elif tmp == 2:
-                        s.connection[0].send("M91;".encode('utf-8'))
+                        play_music("r1", 9)
                     elif tmp == 3:
-                        s.connection[0].send("MA1;".encode('utf-8'))
+                        play_music("r1", 10)
                     elif tmp == 4:
-                        s.connection[0].send("MB1;".encode('utf-8'))
+                        play_music("r1", 11)
 
                     if settings.time_m*60 + settings.time_s> 15*60:
                         settings.order_music-=1
@@ -1196,20 +1221,20 @@ def strobe_music_play(dt):
             tmp = random.randint(1,3)
             print(tmp)
             if tmp == 1:
-                s.connection[0].send("MD1;".encode('utf-8'))
+                play_music("r1", 13)
             elif tmp == 2:
-                s.connection[0].send("ME1;".encode('utf-8'))
+                play_music("r1", 14)
             elif tmp == 3:
-                s.connection[0].send("MF1;".encode('utf-8'))
+                play_music("r1", 15)
     except:
         pass
 def play_end_music():
     try:
         if settings.scripts == 0:
-            s.connection[0].send("M61;".encode('utf-8'))
+            play_music("r1", 6)
 
         if settings.scripts == 1:
-            s.connection[0].send("MC1;".encode('utf-8'))
+            play_music("r1", 12)
     except:
         pass
 
@@ -1229,8 +1254,21 @@ def stop_events():
     if settings.outs['RunStopLamp']:
         action_runstop_lamp(0)
     try:
-        s.connection[0].send("M00;".encode('utf-8'))
+        game_server.connection[0].send("M00;") # TODO stop ALL
     except:
         pass
     if settings.runstop:
         play_end_music()
+
+def play_music(rpi: str, track: str):
+    game_server.send_message(f'{rpi}:play:{track};')
+
+def pause_music(rpi: str, track: str):
+    game_server.send_message(f'{rpi}:pause:{track};')
+
+def stop_music(rpi: str, track: str):
+    game_server.send_message(f'{rpi}:stop:{track};')
+
+def change_volume(rpi: str, volume: int):
+    settings.volumes[rpi] = volume
+    game_server.send_message(f'{rpi}:volume:{volume};')

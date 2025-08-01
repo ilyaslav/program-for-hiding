@@ -1,74 +1,82 @@
 import socket
-import threading
-import settings
+from select import select
+import itertools
 
-class Server():
-    def __init__(self):
-        self.connection = []
-        self.messenges = []
-        self.HOST = self.get_local_ip()
-        self.PORT = 1111
 
-    def get_local_ip(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            # doesn't even have to be reachable
-            s.connect(('192.255.255.255', 1))
-            IP = s.getsockname()[0]
-        except:
-            IP = '127.0.0.1'
-        finally:
-            s.close()
+class Server:
+	def __init__(self):
+		self.HOST = self.get_local_ip()
+		self.PORT = 1111
+		self.connections = []
+		self.messages = []
 
-        print(IP)
-        return IP
+	def get_local_ip(self):
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		try:
+			# doesn't even have to be reachable
+			s.connect(('192.255.255.255', 1))
+			IP = s.getsockname()[0]
+		except:
+			IP = '127.0.0.1'
+		finally:
+			s.close()
+		return IP
 
-    def serverFunction(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind((self.HOST,self.PORT))
-            s.listen()
 
-            while True:
-                try:
-                    conn, addr = s.accept()
-                    with conn:
-                        self.connection.append(conn)
-                        print(f"Connected by {addr}")
-                        print(self.connection)
+	def start_server(self):
+		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+			sock.bind((self.HOST,self.PORT))
+			sock.listen()
+			sock.settimeout(0.1)
 
-                        while True:
-                            data = conn.recv(1024).decode('utf-8')
-                            self.messenges.extend(data.split(';')[:-1])
+			self.connections_handler(sock)
 
-                            while self.messenges:
-                                ms = self.messenges.pop()
 
-                                if ms == 'F10':
-                                    settings.inputs['fans'][0] = True
-                                elif ms == 'F11':
-                                    settings.inputs['fans'][0] = False
-                                elif ms == 'F20':
-                                    settings.inputs['fans'][1] = True
-                                elif ms == 'F21':
-                                    settings.inputs['fans'][1] = False
-                                elif ms == 'F30':
-                                    settings.inputs['fans'][2] = True
-                                elif ms == 'F31':
-                                    settings.inputs['fans'][2] = False
-                                elif ms == 'F40':
-                                    settings.inputs['fans'][3] = True
-                                elif ms == 'F41':
-                                    settings.inputs['fans'][3] = False
+	def connections_handler(self, sock):
+		while True:
+			try:
+				conn, addr = sock.accept()
 
-                                elif ms == 'RS0':
-                                    settings.inputs['runstop'] = True
-                                elif ms == 'RS1':
-                                    settings.inputs['runstop'] = False
+			except OSError:
+				pass
 
-                except TimeoutError as e:
-                    print(e)
-                    continue
+			else:
+				print(f"Connected by {addr}")
+				self.connections.append(conn)
+				self.init_settings()
 
-                except OSError as e:
-                    print(e)
-                    self.connection.pop()
+			finally:
+				for conn in self.connections:
+					redy_to_read = []
+					redy_to_read, _, _ = select(self.connections, [], [], 0)
+					if conn in redy_to_read:
+						try:
+							data = conn.recv(1024).decode('utf-8')
+							self.messages.extend(data.split(';')[:-1])
+							while self.messages:
+								mes = self.messages.pop(0)
+								self.message_handler(mes)
+						except:
+							ind = self.connections.index(conn)
+							self.connections.pop(ind)
+							
+
+	def init_settings(self):
+		pass
+
+
+	def message_handler(self, mes):
+		self.send_message(mes)
+
+
+	def send_message(self, message):
+		for conn in self.connections:
+			try:
+				conn.send(message.encode('utf-8'))
+			except:
+				ind = self.connections.index(conn)
+				self.connections.pop(ind)
+
+if __name__ == '__main__':
+	s = Server()
+	s.start_server()
