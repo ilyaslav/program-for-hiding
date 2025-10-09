@@ -703,7 +703,7 @@ class MyWindow(Ui_MainWindow):
 
     def change_time(self):
         try:
-            time = self.timer.text().split(':')
+            time = self.tab_operator.timer.text().split(':')
             settings.time_m = int(time[0])
             settings.time_s = int(time[1])
             if settings.time_m > 18:
