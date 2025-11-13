@@ -1,6 +1,7 @@
 import socket
 from select import select
 import itertools
+import settings
 
 
 class Server:
@@ -66,12 +67,21 @@ class Server:
 
 
 	def message_handler(self, mes):
-		self.send_message(mes)
+		try:
+			print(mes)
+			rpi, inputName, value = mes.split(':')
+			if rpi == 'r1':
+				settings.inputs[f"{rpi}:{inputName}"] = not bool(int(value))
+			else:
+				settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
+		except Exception as e:
+			print(e)
 
 
 	def send_message(self, message):
 		for conn in self.connections:
 			try:
+				print(f"sending message {message}")
 				conn.send(message.encode('utf-8'))
 			except:
 				ind = self.connections.index(conn)

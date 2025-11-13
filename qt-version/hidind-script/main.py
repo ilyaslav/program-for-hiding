@@ -922,7 +922,7 @@ class MyWindow(Ui_MainWindow):
         for input_key, tab_name, sensor_name in sensor_mapping:
             tab_widget = getattr(self, tab_name)
             sensor_widget = getattr(tab_widget, sensor_name)
-            sensor_widget.setStyleSheet(style_off if settings.inputs[input_key] else style_on)
+            sensor_widget.setStyleSheet(style_on if settings.inputs[input_key] else style_off)
 
 
     def reset_OnOff_bt(self):

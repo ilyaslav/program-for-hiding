@@ -134,7 +134,7 @@ class Ping:
                 self.do_ping_out(rpi)
 
     def check_input(self, rpi_name: str) -> bool:
-        return settings.inputs[f"{rpi_name}:{self.ping_input}"] == settings.pings[rpi_name].ping_status
+        return settings.inputs[f"{rpi_name}:{self.ping_input}"] != settings.pings[rpi_name].ping_status
 
     def check_status(self) -> bool:
         for rpi_name in settings.pings:

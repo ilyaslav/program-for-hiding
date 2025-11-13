@@ -5,11 +5,12 @@ import time
 import settings
 from server import Server
 
-
-class GameServer(Server):
-    def message_handler(mes: str):
+def message_handler(mes: str):
+    try:
         rpi, inputName, value = mes.split(':')
         settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
+    except Exception as e:
+        print(e)
 
 
 game_server = Server()
@@ -115,7 +116,7 @@ def set_standart_outs():
 
 
 def check_start():
-    if settings.inputs['r1:x1'] == False and not settings.game_status:
+    if settings.inputs['r1:x1'] == True and not settings.game_status:
         settings.start_run_time = time.time()
         settings.game_status = True
 
@@ -125,7 +126,7 @@ def check_start():
             settings.start_run_time = -1
             return True
 
-    if settings.inputs['r1:x1'] == True:
+    if settings.inputs['r1:x1'] == False:
         settings.game_status = False
         settings.start_run_time = -1
         settings.pressed_time = time.time()

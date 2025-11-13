@@ -78,17 +78,17 @@ outs = {
     "r3:y38": False,
 }
 inputs = {
-    "r1:x1": True,
-    "r1:x2": True,
-    "r1:x3": True,
-    "r1:x4": True,
-    "r1:x5": True,
-    "r1:x40": True,
-    "r2:x1": True,
-    "r2:x40": True,
-    "r3:x1": True,
-    "r3:x2": True,
-    "r3:x40": True,
+    "r1:x1": False,
+    "r1:x2": False,
+    "r1:x3": False,
+    "r1:x4": False,
+    "r1:x5": False,
+    "r1:x40": False,
+    "r2:x1": False,
+    "r2:x40": False,
+    "r3:x1": False,
+    "r3:x2": False,
+    "r3:x40": False,
 }
 
 game_status = False
