@@ -51,7 +51,7 @@ class Ping:
         self.start_blink_interval = settings.timebox['t26']
         self.r2_blink_interval = settings.timebox['t27']
         self.start_blinker = Blinker(self.blink_start_button, self.start_blink_interval)
-        self.r2_blinker = Blinker(self.blink_r2_outs, self.r2_blink_interval)
+        self.r2_blinker = Blinker(self.blink_r2_outs, self.r2_blink_interval, 8)
         self.connection_success_play = SingleTimer(self.play_track_connection_success)
         self.ping_r2_event = SingleTimer(self.ping_r2)
 
@@ -185,6 +185,12 @@ class Ping:
         self.reset_r2_other_outs(False)
         time.sleep(1)
         self.reset_r2_blinked_outs(True)
+
+    def stop_events(self):
+        self.start_blinker.stop()
+        self.r2_blinker.stop()
+        self.connection_success_play.stop()
+        self.ping_r2_event.stop()
 
 
 if __name__ == "__main__":

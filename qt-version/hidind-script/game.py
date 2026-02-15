@@ -52,19 +52,6 @@ def set_standard_settings():
     settings.fan_strobe = False
     settings.staticUV = [False, False, False, False, False, False, False, False, False]
     set_standart_outs()
-    settings.inputs = {
-        "r1:x1": True,
-        "r1:x2": True,
-        "r1:x3": True,
-        "r1:x4": True,
-        "r1:x5": True,
-        "r1:x40": True,
-        "r2:x1": True,
-        "r2:x40": True,
-        "r3:x1": True,
-        "r3:x2": True,
-        "r3:x40": True,
-    }
     settings.game_status = False
 
 

@@ -185,10 +185,6 @@ class MyWindow(Ui_MainWindow):
             settings.time_event = False
             self.tab_operator.timer.setText(settings.time)
 
-        if not settings.runstop and not settings.bonuses['settings'] and self.ping.status not in (PingStatus.DO_SHORT_PING, PingStatus.DO_FULL_PING):
-            game.off_all()
-            game.set_standart_outs()
-
         if settings.end_timer_event:
             settings.end_timer_event = False
             self.reset_time()
@@ -439,7 +435,7 @@ class MyWindow(Ui_MainWindow):
             self.tab_system.get_indicator_rsb2().setColor(QColor("green"))
         else:
             self.tab_system.get_indicator_rsb2().setColor(QColor("red"))
-        if settings.pings['r2'].rpi_status:
+        if settings.pings['r3'].rpi_status:
             self.tab_system.get_indicator_rsb3().setColor(QColor("green"))
         else:
             self.tab_system.get_indicator_rsb3().setColor(QColor("red"))
@@ -524,6 +520,7 @@ class MyWindow(Ui_MainWindow):
 
     def bt_reset_press(self):
         game.stop_events()
+        self.ping.stop_events()
         game.set_standard_settings()
         game.off_all()
         self.reset_bt_colors()
