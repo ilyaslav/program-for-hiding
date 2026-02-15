@@ -79,6 +79,7 @@ class Server:
 
 
 	def send_message(self, message):
+		print(f"try sending message {message}")
 		for conn in self.connections:
 			try:
 				print(f"sending message {message}")

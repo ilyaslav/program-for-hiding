@@ -115,8 +115,8 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r2.blinker_on.pressed.connect(partial(self.reset_blinker, 1))
         self.tab_diagnostic_r2.animator_start_off.pressed.connect(partial(self.reset_animator_start, 0))
         self.tab_diagnostic_r2.animator_start_on.pressed.connect(partial(self.reset_animator_start, 1))
-        self.tab_diagnostic_r2.ping_off.pressed.connect(partial(self.reset_ping_r2, 0))
-        self.tab_diagnostic_r2.ping_on.pressed.connect(partial(self.reset_ping_r2, 1))
+        self.tab_diagnostic_r2.ping_off.pressed.connect(partial(self.reset_ping_r2, 1))
+        self.tab_diagnostic_r2.ping_on.pressed.connect(partial(self.reset_ping_r2, 0))
         self.tab_diagnostic_r2.light1_off.pressed.connect(partial(self.reset_light, 1, 0, 1))
         self.tab_diagnostic_r2.light1_on.pressed.connect(partial(self.reset_light, 0, 0, 1))
         self.tab_diagnostic_r2.light1_blink.pressed.connect(partial(self.reset_light, 1, 1, 1))
@@ -143,8 +143,8 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r3.mask_off.pressed.connect(partial(self.reset_mask, 0))
         self.tab_diagnostic_r3.light_on.pressed.connect(partial(self.reset_light_r3, 1))
         self.tab_diagnostic_r3.light_off.pressed.connect(partial(self.reset_light_r3, 0))
-        self.tab_diagnostic_r3.ping_on.pressed.connect(partial(self.reset_ping_r3, 1))
-        self.tab_diagnostic_r3.ping_off.pressed.connect(partial(self.reset_ping_r3, 0))
+        self.tab_diagnostic_r3.ping_on.pressed.connect(partial(self.reset_ping_r3, 0))
+        self.tab_diagnostic_r3.ping_off.pressed.connect(partial(self.reset_ping_r3, 1))
 
         self.tab_system.start_btn.pressed.connect(self.bt_start_system_press)
         self.tab_system.stop_btn.pressed.connect(self.bt_reset_press)
@@ -410,11 +410,13 @@ class MyWindow(Ui_MainWindow):
                     self.tab_system.start_btn.setDisabled(False)
                     self.tab_system.stop_btn.setDisabled(False)
                     self.tab_system.check_btn.setDisabled(False)
-                    self.tab_system.skip_btn.setDisabled(False)
+                    self.tab_system.skip_btn.setDisabled(True)
                 case PingStatus.NOT_READY:
                     self.set_red_indicators_color()
                     self.set_ping_scripts()
                     self.start_system_btn_blinker.start()
+                    self.tab_system.skip_btn.setStyleSheet(
+                        "font-size: 14px; font-weight: bold; padding: 6px; min-height: 40px; background-color: yellow;")
                     self.tab_system.start_btn.setDisabled(False)
                     self.tab_system.stop_btn.setDisabled(False)
                     self.tab_system.check_btn.setDisabled(False)
@@ -422,9 +424,23 @@ class MyWindow(Ui_MainWindow):
                 case PingStatus.SKIP:
                     self.tabWidget.setTabEnabled(1, True)
                     self.tabWidget.setTabEnabled(2, True)
+                    self.start_system_btn_blinker.stop()
+                    self.tab_system.skip_btn.setStyleSheet(
+                        "font-size: 14px; font-weight: bold; padding: 6px; min-height: 40px; background-color: green;")
+                    self.tab_system.start_btn.setDisabled(True)
+                    self.tab_system.stop_btn.setDisabled(True)
+                    self.tab_system.check_btn.setDisabled(False)
+                    self.tab_system.skip_btn.setDisabled(False)
                 case PingStatus.WAITING:
                     self.tabWidget.setTabEnabled(1, False)
                     self.tabWidget.setTabEnabled(2, False)
+                    self.start_system_btn_blinker.start()
+                    self.tab_system.skip_btn.setStyleSheet(
+                        "font-size: 14px; font-weight: bold; padding: 6px; min-height: 40px; background-color: red;")
+                    self.tab_system.start_btn.setDisabled(False)
+                    self.tab_system.stop_btn.setDisabled(False)
+                    self.tab_system.check_btn.setDisabled(False)
+                    self.tab_system.skip_btn.setDisabled(True)
 
     def display_rpi_statuses(self):
         if settings.pings['r1'].rpi_status:
@@ -903,23 +919,26 @@ class MyWindow(Ui_MainWindow):
         style_off = "background-color: rgb(117, 123, 127);"
         style_on = "background-color: rgb(255, 255, 0);"
         sensor_mapping = [
-            ('r1:x1', 'tab_diagnostic', 'sensor_runstop'),
-            ('r1:x2', 'tab_diagnostic', 'sensor_1'),
-            ('r1:x3', 'tab_diagnostic', 'sensor_2'),
-            ('r1:x4', 'tab_diagnostic', 'sensor_3'),
-            ('r1:x5', 'tab_diagnostic', 'sensor_4'),
-            ('r1:x40', 'tab_diagnostic', 'sensor_5'),
-            ('r2:x1', 'tab_diagnostic_r2', 'sensor_door'),
-            ('r2:x40', 'tab_diagnostic_r2', 'ping_input'),
-            ('r3:x1', 'tab_diagnostic_r3', 'animator_input'),
-            ('r3:x2', 'tab_diagnostic_r3', 'light_input'),
-            ('r3:x40', 'tab_diagnostic_r3', 'ping_input'),
+            ('r1:x1', 'tab_diagnostic', 'sensor_runstop', False),
+            ('r1:x2', 'tab_diagnostic', 'sensor_1', False),
+            ('r1:x3', 'tab_diagnostic', 'sensor_2', False),
+            ('r1:x4', 'tab_diagnostic', 'sensor_3', False),
+            ('r1:x5', 'tab_diagnostic', 'sensor_4', False),
+            ('r1:x40', 'tab_diagnostic', 'sensor_5', True),
+            ('r2:x1', 'tab_diagnostic_r2', 'sensor_door', False),
+            ('r2:x40', 'tab_diagnostic_r2', 'ping_input', False),
+            ('r3:x1', 'tab_diagnostic_r3', 'animator_input', False),
+            ('r3:x2', 'tab_diagnostic_r3', 'light_input', False),
+            ('r3:x40', 'tab_diagnostic_r3', 'ping_input', False),
         ]
 
-        for input_key, tab_name, sensor_name in sensor_mapping:
+        for input_key, tab_name, sensor_name, inverted in sensor_mapping:
             tab_widget = getattr(self, tab_name)
             sensor_widget = getattr(tab_widget, sensor_name)
-            sensor_widget.setStyleSheet(style_on if settings.inputs[input_key] else style_off)
+            input_value = settings.inputs[input_key]
+            if inverted:
+                input_value = not input_value
+            sensor_widget.setStyleSheet(style_on if input_value else style_off)
 
 
     def reset_OnOff_bt(self):
@@ -966,6 +985,7 @@ class MyWindow(Ui_MainWindow):
             self.tab_operator.bt_15min.setDisabled(True)
             self.tab_operator.bt_18min.setDisabled(True)
             self.tab_operator.timer.setDisabled(True)
+            self.tab_system.start_btn.setDisabled(True)
         else:
             self.tab_scripts.get_script1_bt().setDisabled(False)
             self.tab_scripts.get_script2_bt().setDisabled(False)
@@ -979,6 +999,7 @@ class MyWindow(Ui_MainWindow):
             self.tab_operator.bt_15min.setDisabled(False)
             self.tab_operator.bt_18min.setDisabled(False)
             self.tab_operator.timer.setDisabled(False)
+            self.tab_system.start_btn.setDisabled(False)
 
     def disabled_settings(self):
         self.tab_operator.bt_UV.setDisabled(False)

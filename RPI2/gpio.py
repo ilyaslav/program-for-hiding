@@ -24,7 +24,7 @@ class PiHandler:
             "y12": 37,
             "y13": 8,
             "y14": 10,
-            "y15": 16,
+            "y18": 24,
             "y16": 18,
             "y17": 24,
             "y38": 38,
@@ -70,7 +70,7 @@ class PiHandler:
         GPIO.setup(37, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(10, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(24, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(18, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(24, GPIO.OUT, initial=GPIO.HIGH)
         GPIO.setup(38, GPIO.OUT, initial=GPIO.HIGH)
