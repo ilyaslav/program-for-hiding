@@ -33,7 +33,6 @@ def set_standard_settings():
     settings.time = "10:00"
     settings.time_m = 10
     settings.time_s = 0
-    settings.pressed_time = 0
     settings.order = 1
     settings.order_strobe = 1
     settings.order_music = 1
@@ -107,18 +106,17 @@ def check_start():
         settings.start_run_time = time.time()
         settings.game_status = True
 
-    if settings.game_status:
-        if settings.timebox['t1'] < time.time() - settings.start_run_time < settings.timebox['t1'] + 0.2:
+    if settings.game_status and settings.start_button_release:
+        if settings.timebox['t1'] < time.time() - settings.start_run_time:
             settings.game_status = False
             settings.start_run_time = -1
-            return True
+            settings.start_button_release = False
+            return not settings.runstop
 
     if settings.inputs['r1:x1'] == False:
         settings.game_status = False
         settings.start_run_time = -1
-        settings.pressed_time = time.time()
-
-    return time.time() - settings.pressed_time > 7 and settings.runstop
+        settings.start_button_release = True
 
 
 def check_fans():

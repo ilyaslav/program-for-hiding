@@ -186,7 +186,9 @@ class Ping:
         time.sleep(5)
         self.reset_r2_other_outs(False)
         time.sleep(1)
-        self.reset_r2_blinked_outs(True)
+        self.reset_r2_blinked_outs(False)
+        time.sleep(2)
+        reset_out(f"{self.rpi_2}:y16", 0)
 
     def stop_events(self):
         self.start_blinker.stop()

@@ -408,7 +408,7 @@ class MyWindow(Ui_MainWindow):
                     self.set_ping_scripts()
                     self.tabWidget.setTabEnabled(1, True)
                     self.tabWidget.setTabEnabled(2, True)
-                    self.tab_system.start_btn.setDisabled(False)
+                    self.tab_system.start_btn.setDisabled(True)
                     self.tab_system.stop_btn.setDisabled(False)
                     self.tab_system.check_btn.setDisabled(False)
                     self.tab_system.skip_btn.setDisabled(True)
@@ -438,7 +438,7 @@ class MyWindow(Ui_MainWindow):
                     self.start_system_btn_blinker.start()
                     self.tab_system.skip_btn.setStyleSheet(
                         "font-size: 14px; font-weight: bold; padding: 6px; min-height: 40px; background-color: red;")
-                    self.tab_system.start_btn.setDisabled(False)
+                    self.tab_system.start_btn.setDisabled(True)
                     self.tab_system.stop_btn.setDisabled(False)
                     self.tab_system.check_btn.setDisabled(False)
                     self.tab_system.skip_btn.setDisabled(True)

@@ -11,7 +11,6 @@ time = "10:00"
 time_m = 10
 time_s = 0
 
-pressed_time = 0
 timeUV_bt = [False, False, False]
 UV_activation_time = timebox['t42']
 
@@ -92,6 +91,7 @@ inputs = {
 }
 
 game_status = False
+start_button_release = True
 
 uv_event = False
 strobe_event = False
