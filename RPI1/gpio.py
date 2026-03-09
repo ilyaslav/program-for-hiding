@@ -40,8 +40,8 @@ class PiHandler:
     def getInputs():
         inputs = {
             'x1': GPIO.input(3),
-            'x2': GPIO.input(4),
-            'x3': GPIO.input(5),
+            'x2': GPIO.input(5),
+            'x3': GPIO.input(7),
             'x4': GPIO.input(11),
             'x5': GPIO.input(13),
             'x40': GPIO.input(40),
@@ -63,8 +63,8 @@ class PiHandler:
     def initGPIO(self):
         GPIO.setmode(GPIO.BOARD)
 
-        GPIO.setup(3, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-        GPIO.setup(5, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+        GPIO.setup(3, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+        GPIO.setup(5, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
         GPIO.setup(7, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         GPIO.setup(11, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         GPIO.setup(13, GPIO.IN, pull_up_down = GPIO.PUD_UP)

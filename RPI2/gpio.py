@@ -24,9 +24,10 @@ class PiHandler:
             "y12": 37,
             "y13": 8,
             "y14": 10,
+            "y15": 12,
+            "y16": 16,
+            "y17": 18,
             "y18": 24,
-            "y16": 18,
-            "y17": 24,
             "y38": 38,
         }
 
@@ -53,33 +54,34 @@ class PiHandler:
     def initGPIO(self):
         GPIO.setmode(GPIO.BOARD)
 
-        GPIO.setup(22, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-        GPIO.setup(40, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+        GPIO.setup(22, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+        GPIO.setup(40, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-        GPIO.setup(7, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(11, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(13, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(15, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(19, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(21, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(23, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(29, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(31, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(33, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(35, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(37, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(10, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(24, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(18, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(24, GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.setup(38, GPIO.OUT, initial=GPIO.HIGH)
+        GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(13, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(19, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(21, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(23, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(33, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(35, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(10, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(38, GPIO.OUT, initial=GPIO.LOW)
 
     def resetOut(self, out, status):
         if status:
-            GPIO.output(self.outs[out], GPIO.LOW)
-        else:
             GPIO.output(self.outs[out], GPIO.HIGH)
+        else:
+            GPIO.output(self.outs[out], GPIO.LOW)
 
     def resetInput(self, input, status):
         pass

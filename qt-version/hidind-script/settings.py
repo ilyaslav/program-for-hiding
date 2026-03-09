@@ -72,10 +72,10 @@ outs = {
     "r2:y16": False,
     "r2:y17": False,
     "r2:y18": False,
-    "r2:y38": True,
+    "r2:y38": False,
     "r3:y1": False,
     "r3:y2": False,
-    "r3:y38": True,
+    "r3:y38": False,
 }
 inputs = {
     "r1:x1": False,
@@ -135,7 +135,7 @@ button_config = [
     {'outputs': ['r2:y1'], 'tab': 'tab_diagnostic_r2', 'buttons': ['spot_off', 'spot_on', None], 'logic': 'standard', 'inverted': True},
     {'outputs': ['r2:y16'], 'tab': 'tab_diagnostic_r2', 'buttons': ['blinker_off', 'blinker_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r2:y17'], 'tab': 'tab_diagnostic_r2', 'buttons': ['animator_start_off', 'animator_start_on', None], 'logic': 'standard', 'inverted': False},
-    {'outputs': ['r2:y38'], 'tab': 'tab_diagnostic_r2', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': True},
+    {'outputs': ['r2:y38'], 'tab': 'tab_diagnostic_r2', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': False},
     # Специальные кнопки с blink
     {'outputs': ['r2:y2', 'r2:y3'], 'tab': 'tab_diagnostic_r2', 'buttons': ['light1_off', 'light1_on', 'light1_blink'], 'logic': 'special', 'inverted': False},
     {'outputs': ['r2:y4', 'r2:y5'], 'tab': 'tab_diagnostic_r2', 'buttons': ['light2_off', 'light2_on', 'light2_blink'], 'logic': 'special', 'inverted': False},
@@ -147,5 +147,5 @@ button_config = [
 
     {'outputs': ['r3:y1'], 'tab': 'tab_diagnostic_r3', 'buttons': ['mask_off', 'mask_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r3:y2'], 'tab': 'tab_diagnostic_r3', 'buttons': ['light_off', 'light_on', None], 'logic': 'standard', 'inverted': False},
-    {'outputs': ['r3:y38'], 'tab': 'tab_diagnostic_r3', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': True},
+    {'outputs': ['r3:y38'], 'tab': 'tab_diagnostic_r3', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': False},
 ]

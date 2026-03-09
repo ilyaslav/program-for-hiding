@@ -115,8 +115,8 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r2.blinker_on.pressed.connect(partial(self.reset_blinker, 1))
         self.tab_diagnostic_r2.animator_start_off.pressed.connect(partial(self.reset_animator_start, 0))
         self.tab_diagnostic_r2.animator_start_on.pressed.connect(partial(self.reset_animator_start, 1))
-        self.tab_diagnostic_r2.ping_off.pressed.connect(partial(self.reset_ping_r2, 1))
-        self.tab_diagnostic_r2.ping_on.pressed.connect(partial(self.reset_ping_r2, 0))
+        self.tab_diagnostic_r2.ping_off.pressed.connect(partial(self.reset_ping_r2, 0))
+        self.tab_diagnostic_r2.ping_on.pressed.connect(partial(self.reset_ping_r2, 1))
         self.tab_diagnostic_r2.light1_off.pressed.connect(partial(self.reset_light, 1, 0, 1))
         self.tab_diagnostic_r2.light1_on.pressed.connect(partial(self.reset_light, 0, 0, 1))
         self.tab_diagnostic_r2.light1_blink.pressed.connect(partial(self.reset_light, 1, 1, 1))
@@ -143,8 +143,8 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r3.mask_off.pressed.connect(partial(self.reset_mask, 0))
         self.tab_diagnostic_r3.light_on.pressed.connect(partial(self.reset_light_r3, 1))
         self.tab_diagnostic_r3.light_off.pressed.connect(partial(self.reset_light_r3, 0))
-        self.tab_diagnostic_r3.ping_on.pressed.connect(partial(self.reset_ping_r3, 0))
-        self.tab_diagnostic_r3.ping_off.pressed.connect(partial(self.reset_ping_r3, 1))
+        self.tab_diagnostic_r3.ping_on.pressed.connect(partial(self.reset_ping_r3, 1))
+        self.tab_diagnostic_r3.ping_off.pressed.connect(partial(self.reset_ping_r3, 0))
 
         self.tab_system.start_btn.pressed.connect(self.bt_start_system_press)
         self.tab_system.stop_btn.pressed.connect(self.bt_reset_press)
@@ -190,6 +190,7 @@ class MyWindow(Ui_MainWindow):
             self.reset_time()
             self.disabling_buttons()
             self.reset_bt_colors()
+            self.ping.start_blinker.start()
 
         self.reset_system_tab()
 
@@ -225,7 +226,7 @@ class MyWindow(Ui_MainWindow):
             4: {'out1_name': 'r2:y8', 'out2_name': 'r2:y9'},
             5: {'out1_name': 'r2:y10', 'out2_name': 'r2:y11'},
             6: {'out1_name': 'r2:y12', 'out2_name': 'r2:y13'},
-            7: {'out1_name': 'r2:y14', 'out2_name': 'r2:y15'},
+            7: {'out1_name': 'r2:y14', 'out2_name': 'r2:y18'},
         }
         game.reset_light_outs(order_map[order]['out1_name'], value1, order_map[order]['out2_name'], value2)
         self.reset_OnOff_bt()
@@ -517,10 +518,13 @@ class MyWindow(Ui_MainWindow):
         if settings.outs['r1:y2']:
             game.action_shadow_lamp(0)
 
-        game.set_standart_outs()
-        game.action_runstop_lamp(0)
         if settings.runstop:
             game.play_end_music()
+            self.ping.start_blinker.start()
+        else:
+            self.ping.stop_events()
+        game.set_standart_outs()
+        game.action_runstop_lamp(0)
 
         settings.runstop = not settings.runstop
         self.change_RSbt_color()

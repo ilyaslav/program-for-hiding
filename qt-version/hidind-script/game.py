@@ -57,24 +57,24 @@ def set_standard_settings():
 
 def set_standart_outs():
     settings.outs = {
-        "r1:y1": True,  # RunStopLamp
-        "r1:y2": True,  # ShadowLamp
-        "r1:y3": True,  # UVlamps
-        "r1:y4": True,  # UVlamps
-        "r1:y5": True,  # UVlamps
-        "r1:y6": True,  # UVlamps
-        "r1:y7": True,  # UVlamps
-        "r1:y8": True,  # UVlamps
-        "r1:y9": True,  # UVlamps
-        "r1:y10": True,  # UVlamps
-        "r1:y11": True,  # UVlamps
-        "r1:y12": True,  # Fans
-        "r1:y13": True,  # Fans
-        "r1:y14": True,  # Fans
-        "r1:y15": True,  # Fans
-        "r1:y16": True,  # Strobes
-        "r1:y17": True,  # Strobes
-        "r1:y18": True,  # Strobes
+        "r1:y1": False,  # RunStopLamp
+        "r1:y2": False,  # ShadowLamp
+        "r1:y3": False,  # UVlamps
+        "r1:y4": False,  # UVlamps
+        "r1:y5": False,  # UVlamps
+        "r1:y6": False,  # UVlamps
+        "r1:y7": False,  # UVlamps
+        "r1:y8": False,  # UVlamps
+        "r1:y9": False,  # UVlamps
+        "r1:y10": False,  # UVlamps
+        "r1:y11": False,  # UVlamps
+        "r1:y12": False,  # Fans
+        "r1:y13": False,  # Fans
+        "r1:y14": False,  # Fans
+        "r1:y15": False,  # Fans
+        "r1:y16": False,  # Strobes
+        "r1:y17": False,  # Strobes
+        "r1:y18": False,  # Strobes
         "r1:y19": False,  # Souls
         "r1:y38": False,
         "r2:y1": False,
@@ -1130,6 +1130,42 @@ def off_all():
     off_strobes()
     off_UV_lamps()
     off_other()
+    off_r2()
+    off_r3()
+
+
+def off_r2():
+    try:
+        game_server.send_message("r2:y1:0;")
+        game_server.send_message("r2:y16:0;")
+        game_server.send_message("r2:y17:0;")
+        game_server.send_message("r2:y38:0;")
+
+        game_server.send_message("r2:y2:0;")
+        game_server.send_message("r2:y3:0;")
+        game_server.send_message("r2:y4:0;")
+        game_server.send_message("r2:y5:0;")
+        game_server.send_message("r2:y6:0;")
+        game_server.send_message("r2:y7:0;")
+        game_server.send_message("r2:y8:0;")
+        game_server.send_message("r2:y9:0;")
+        game_server.send_message("r2:y10:0;")
+        game_server.send_message("r2:y11:0;")
+        game_server.send_message("r2:y12:0;")
+        game_server.send_message("r2:y13:0;")
+        game_server.send_message("r2:y14:0;")
+        game_server.send_message("r2:y18:0;")
+    except:
+        pass
+
+
+def off_r3():
+    try:
+        game_server.send_message("r3:y1:0;")
+        game_server.send_message("r3:y2:0;")
+        game_server.send_message("r3:y38:0;")
+    except:
+        pass
 
 
 def off_other():
