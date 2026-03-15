@@ -111,7 +111,7 @@ def check_start():
             settings.game_status = False
             settings.start_run_time = -1
             settings.start_button_release = False
-            return not settings.runstop
+            return True
 
     if settings.inputs['r1:x1'] == False:
         settings.game_status = False
@@ -122,27 +122,24 @@ def check_start():
 def check_fans():
     for i in range(4):
         fan_input = i + 2
-        if not settings.inputs[f"r1:x{fan_input}"] and time.time() - settings.fans_run_time[i] > settings.timebox['t17']:
+        if settings.inputs[f"r1:x{fan_input}"] and time.time() - settings.fans_run_time[i] > settings.timebox['t17']:
             settings.order_fans[i] += 1
             settings.fans_run_time[i] = time.time()
 
             if settings.order_fans[i] == 3:
                 settings.order_fans[i] = 0
-
-                if i == 0:
-                    if settings.bonuses["fans"]:
+                
+                if settings.bonuses["fans"]:
+                    if i == 0:
                         action_fan1(0)
                         action_fan1(4)
-                if i == 1:
-                    if settings.bonuses["fans"]:
+                    if i == 1:
                         action_fan2(0)
                         action_fan2(4)
-                if i == 2:
-                    if settings.bonuses["fans"]:
+                    if i == 2:
                         action_fan3(0)
                         action_fan3(4)
-                if i == 3:
-                    if settings.bonuses["fans"]:
+                    if i == 3:
                         action_fan4(0)
                         action_fan4(4)
 
@@ -153,7 +150,7 @@ def init_game():
             settings.start_event = True
             start_game(settings.timebox['t2'])
             try:
-                play_music("r1", 1)
+                play_music("r1", 16)
             except:
                 pass
         elif settings.scripts == 1:
@@ -1095,15 +1092,15 @@ def timer_run(dt):
 
         try:
             if settings.time_m == 1 and settings.time_s == 0 and settings.scripts == 1 and settings.timer != "05:00":
-                play_music("r1", 16)
-            elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
                 play_music("r1", 17)
-            elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
+            elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
                 play_music("r1", 18)
-            elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
+            elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
                 play_music("r1", 19)
-            elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
+            elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
                 play_music("r1", 20)
+            elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
+                play_music("r1", 21)
         except:
             pass
 

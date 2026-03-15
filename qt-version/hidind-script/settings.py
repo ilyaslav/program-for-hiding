@@ -133,6 +133,7 @@ button_config = [
     {'outputs': ['r1:y38'], 'tab': 'tab_diagnostic', 'buttons': ['bt_ping_off', 'bt_ping_on', None], 'logic': 'standard', 'inverted': False},
 
     {'outputs': ['r2:y1'], 'tab': 'tab_diagnostic_r2', 'buttons': ['spot_off', 'spot_on', None], 'logic': 'standard', 'inverted': True},
+    {'outputs': ['r2:y15'], 'tab': 'tab_diagnostic_r2', 'buttons': ['wardrobe_off', 'wardrobe_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r2:y16'], 'tab': 'tab_diagnostic_r2', 'buttons': ['blinker_off', 'blinker_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r2:y17'], 'tab': 'tab_diagnostic_r2', 'buttons': ['animator_start_off', 'animator_start_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r2:y38'], 'tab': 'tab_diagnostic_r2', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': False},

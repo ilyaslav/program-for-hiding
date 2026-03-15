@@ -115,6 +115,8 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r2.blinker_on.pressed.connect(partial(self.reset_blinker, 1))
         self.tab_diagnostic_r2.animator_start_off.pressed.connect(partial(self.reset_animator_start, 0))
         self.tab_diagnostic_r2.animator_start_on.pressed.connect(partial(self.reset_animator_start, 1))
+        self.tab_diagnostic_r2.wardrobe_off.pressed.connect(partial(self.reset_wardrobe, 0))
+        self.tab_diagnostic_r2.wardrobe_on.pressed.connect(partial(self.reset_wardrobe, 1))
         self.tab_diagnostic_r2.ping_off.pressed.connect(partial(self.reset_ping_r2, 0))
         self.tab_diagnostic_r2.ping_on.pressed.connect(partial(self.reset_ping_r2, 1))
         self.tab_diagnostic_r2.light1_off.pressed.connect(partial(self.reset_light, 1, 0, 1))
@@ -147,7 +149,7 @@ class MyWindow(Ui_MainWindow):
         self.tab_diagnostic_r3.ping_off.pressed.connect(partial(self.reset_ping_r3, 0))
 
         self.tab_system.start_btn.pressed.connect(self.bt_start_system_press)
-        self.tab_system.stop_btn.pressed.connect(self.bt_reset_press)
+        self.tab_system.stop_btn.pressed.connect(self.bt_stop_system_press)
         self.tab_system.check_btn.pressed.connect(self.bt_connection_check_press)
         self.tab_system.skip_btn.pressed.connect(self.bt_skipping_press)
         self.tab_system.get_slider_rsb1().sliderReleased.connect(self.release_volume_rsb1)
@@ -216,6 +218,10 @@ class MyWindow(Ui_MainWindow):
 
     def reset_ping_r2(self, value = 0):
         game.reset_out('r2:y38', value)
+        self.reset_OnOff_bt()
+
+    def reset_wardrobe(self, value = 0):
+        game.reset_out('r2:y15', value)
         self.reset_OnOff_bt()
 
     def reset_light(self, value1: int, value2: int, order: int):
@@ -538,6 +544,12 @@ class MyWindow(Ui_MainWindow):
             settings.time = settings.timer
             settings.time_event = True
 
+    def bt_stop_system_press(self):
+        self.tab_system.start_btn.setDisabled(False)
+        self.bt_reset_press()
+        self.ping.start_blinker.stop()
+        self.ping.play_stop_music()
+
     def bt_reset_press(self):
         game.stop_events()
         self.ping.stop_events()
@@ -553,6 +565,7 @@ class MyWindow(Ui_MainWindow):
         settings.time_event = True
         if self.ping.status == PingStatus.DO_SHORT_PING:
             self.ping.stop_event = True
+        self.ping.start_blinker.start()
 
     def reset_bt_colors(self):
         self.refresh_settings_buttons()
@@ -989,7 +1002,6 @@ class MyWindow(Ui_MainWindow):
             self.tab_operator.bt_15min.setDisabled(True)
             self.tab_operator.bt_18min.setDisabled(True)
             self.tab_operator.timer.setDisabled(True)
-            self.tab_system.start_btn.setDisabled(True)
         else:
             self.tab_scripts.get_script1_bt().setDisabled(False)
             self.tab_scripts.get_script2_bt().setDisabled(False)
@@ -1003,7 +1015,6 @@ class MyWindow(Ui_MainWindow):
             self.tab_operator.bt_15min.setDisabled(False)
             self.tab_operator.bt_18min.setDisabled(False)
             self.tab_operator.timer.setDisabled(False)
-            self.tab_system.start_btn.setDisabled(False)
 
     def disabled_settings(self):
         self.tab_operator.bt_UV.setDisabled(False)

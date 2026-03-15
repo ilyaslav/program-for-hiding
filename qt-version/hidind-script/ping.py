@@ -33,6 +33,7 @@ class Ping:
             "r2:y10",
             "r2:y12",
             "r2:y14",
+            "r2:y15",
         ]
         self.r2_other_outs = [
             "r2:y3",
@@ -41,6 +42,7 @@ class Ping:
             "r2:y9",
             "r2:y11",
             "r2:y13",
+            "r2:y18",
         ]
         self.ping_out = 'y38'
         self.ping_input = 'x40'
@@ -104,8 +106,10 @@ class Ping:
     def skip(self):
         if self.status != PingStatus.SKIP:
             self.status = PingStatus.SKIP
+            self.do_skip_event()
         else:
             self.status = PingStatus.WAITING
+            self.stop_events()
         self.display_ping_event = True
 
     def do_ping_out(self, rpi: PingRpi):
@@ -166,15 +170,15 @@ class Ping:
         reset_out(self.start_button_out, settings.outs[self.start_button_out])
 
     def play_track_connection_success(self):
-        play_music(self.rpi_2, 15)
+        play_music(self.rpi_2, 115)
         time.sleep(3)
-        stop_music(self.rpi_2, 15)
+        stop_music(self.rpi_2, 115)
         time.sleep(6)
-        play_music(self.rpi_2, 15)
+        play_music(self.rpi_2, 115)
         time.sleep(3)
-        stop_music(self.rpi_2, 15)
+        stop_music(self.rpi_2, 115)
         time.sleep(3)
-        play_music(self.rpi_2, 16)
+        play_music(self.rpi_2, 116)
 
     def ping_r2(self):
         reset_out(f"{self.rpi_2}:y16", 1)
@@ -196,6 +200,14 @@ class Ping:
         self.connection_success_play.stop()
         self.ping_r2_event.stop()
 
+    def do_skip_event(self):
+        self.start_blinker.start()
+        play_music(self.rpi_2, 116)
+        self.ping_r2_event.start()
+
+    def play_stop_music(self):
+        play_music(self.rpi_2, 117)
+        stop_music(self.rpi_2, 116)
 
 if __name__ == "__main__":
     pass
