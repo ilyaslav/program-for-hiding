@@ -4,6 +4,7 @@ from rpiPing import PingRpi
 db = Database("settings.db")
 timebox = db.select_times()
 volumes = db.select_volumes()
+tracks = db.select_tracks()
 
 scripts = 0
 timer = "10:00"
@@ -103,6 +104,7 @@ shadow_event = False
 timer_event = False
 end_timer_event = False
 time_event = False
+stop_background_music_event = False
 
 pings = {
     'r1': PingRpi('r1'),

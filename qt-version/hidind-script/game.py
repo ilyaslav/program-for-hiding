@@ -149,10 +149,7 @@ def init_game():
         if settings.scripts == 0:
             settings.start_event = True
             start_game(settings.timebox['t2'])
-            try:
-                play_music("r1", 16)
-            except:
-                pass
+            play_music("r1", 16)
         elif settings.scripts == 1:
             settings.start_event = True
             settings.shadow_event = True
@@ -1090,19 +1087,16 @@ def timer_run(dt):
         settings.time = f"{m1}:{s1}"
         settings.time_event = True
 
-        try:
-            if settings.time_m == 1 and settings.time_s == 0 and settings.scripts == 1 and settings.timer != "05:00":
-                play_music("r1", 17)
-            elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
-                play_music("r1", 18)
-            elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
-                play_music("r1", 19)
-            elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
-                play_music("r1", 20)
-            elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
-                play_music("r1", 21)
-        except:
-            pass
+        if settings.time_m == 1 and settings.time_s == 0 and settings.scripts == 1 and settings.timer != "05:00":
+            play_music("r1", 17)
+        elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
+            play_music("r1", 18)
+        elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
+            play_music("r1", 19)
+        elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
+            play_music("r1", 20)
+        elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
+            play_music("r1", 21)
 
         if settings.time_m == 0 and settings.time_s == 0 or not settings.runstop:
             settings.order = 1
@@ -1130,192 +1124,165 @@ def off_all():
 
 
 def off_r2():
-    try:
-        game_server.send_message("r2:y1:0;")
-        game_server.send_message("r2:y16:0;")
-        game_server.send_message("r2:y17:0;")
-        game_server.send_message("r2:y38:0;")
+    game_server.send_message("r2:y1:0;")
+    game_server.send_message("r2:y16:0;")
+    game_server.send_message("r2:y17:0;")
+    game_server.send_message("r2:y38:0;")
 
-        game_server.send_message("r2:y2:0;")
-        game_server.send_message("r2:y3:0;")
-        game_server.send_message("r2:y4:0;")
-        game_server.send_message("r2:y5:0;")
-        game_server.send_message("r2:y6:0;")
-        game_server.send_message("r2:y7:0;")
-        game_server.send_message("r2:y8:0;")
-        game_server.send_message("r2:y9:0;")
-        game_server.send_message("r2:y10:0;")
-        game_server.send_message("r2:y11:0;")
-        game_server.send_message("r2:y12:0;")
-        game_server.send_message("r2:y13:0;")
-        game_server.send_message("r2:y14:0;")
-        game_server.send_message("r2:y18:0;")
-    except:
-        pass
+    game_server.send_message("r2:y2:0;")
+    game_server.send_message("r2:y3:0;")
+    game_server.send_message("r2:y4:0;")
+    game_server.send_message("r2:y5:0;")
+    game_server.send_message("r2:y6:0;")
+    game_server.send_message("r2:y7:0;")
+    game_server.send_message("r2:y8:0;")
+    game_server.send_message("r2:y9:0;")
+    game_server.send_message("r2:y10:0;")
+    game_server.send_message("r2:y11:0;")
+    game_server.send_message("r2:y12:0;")
+    game_server.send_message("r2:y13:0;")
+    game_server.send_message("r2:y14:0;")
+    game_server.send_message("r2:y18:0;")
 
 
 def off_r3():
-    try:
-        game_server.send_message("r3:y1:0;")
-        game_server.send_message("r3:y2:0;")
-        game_server.send_message("r3:y38:0;")
-    except:
-        pass
+    game_server.send_message("r3:y1:0;")
+    game_server.send_message("r3:y2:0;")
+    game_server.send_message("r3:y38:0;")
 
 
 def off_other():
-    try:
-        game_server.send_message("r1:y1:0;")
-        game_server.send_message("r1:y2:0;")
-        game_server.send_message("r1:y19:0;")
-    except:
-        pass
+    game_server.send_message("r1:y1:0;")
+    game_server.send_message("r1:y2:0;")
+    game_server.send_message("r1:y19:0;")
 
 
 def off_fans():
-    try:
-        game_server.send_message("r1:y12:0;")
-        game_server.send_message("r1:y13:0;")
-        game_server.send_message("r1:y14:0;")
-        game_server.send_message("r1:y15:0;")
-    except:
-        pass
+    game_server.send_message("r1:y12:0;")
+    game_server.send_message("r1:y13:0;")
+    game_server.send_message("r1:y14:0;")
+    game_server.send_message("r1:y15:0;")
 
 
 def off_strobes():
-    try:
-        game_server.send_message("r1:y16:0;")
-        game_server.send_message("r1:y17:0;")
-        game_server.send_message("r1:y18:0;")
-    except:
-        pass
+    game_server.send_message("r1:y16:0;")
+    game_server.send_message("r1:y17:0;")
+    game_server.send_message("r1:y18:0;")
 
 
 def off_UV_lamps():
-    try:
-        game_server.send_message("r1:y3:0;")
-        game_server.send_message("r1:y4:0;")
-        game_server.send_message("r1:y5:0;")
-        game_server.send_message("r1:y6:0;")
-        game_server.send_message("r1:y7:0;")
-        game_server.send_message("r1:y8:0;")
-        game_server.send_message("r1:y9:0;")
-        game_server.send_message("r1:y10:0;")
-        game_server.send_message("r1:y11:0;")
-    except:
-        pass
+    game_server.send_message("r1:y3:0;")
+    game_server.send_message("r1:y4:0;")
+    game_server.send_message("r1:y5:0;")
+    game_server.send_message("r1:y6:0;")
+    game_server.send_message("r1:y7:0;")
+    game_server.send_message("r1:y8:0;")
+    game_server.send_message("r1:y9:0;")
+    game_server.send_message("r1:y10:0;")
+    game_server.send_message("r1:y11:0;")
 
 
 @thread_wraper
 def music_play(dt):
-    try:
-        while True:
-            dt -= 0.1
-            time.sleep(0.1)
-            if not settings.music_play_event:
-                return
-            if dt <= 0:
-                break
-        settings.music_play_event = False
-        if settings.runstop:
-            if settings.scripts == 0:
-                if settings.order_music == 1:
-                    settings.order_music += 1
+    while True:
+        dt -= 0.1
+        time.sleep(0.1)
+        if not settings.music_play_event:
+            return
+        if dt <= 0:
+            break
+    settings.music_play_event = False
+    if settings.runstop:
+        if settings.scripts == 0:
+            if settings.order_music == 1:
+                settings.order_music += 1
 
-                    play_music("r1", 1)
+                play_music("r1", 1)
+                settings.music_play_event = True
+                music_play(6)
+
+            elif settings.order_music == 2:
+                settings.order_music += 1
+
+                tmp = random.randint(1, 4)
+                if tmp == 1:
+                    play_music("r1", 2)
+                elif tmp == 2:
+                    play_music("r1", 3)
+                elif tmp == 3:
+                    play_music("r1", 4)
+                elif tmp == 4:
+                    play_music("r1", 5)
+
+                if settings.time_m * 60 + settings.time_s > 15 * 60:
+                    settings.order_music -= 1
                     settings.music_play_event = True
-                    music_play(6)
-
-                elif settings.order_music == 2:
-                    settings.order_music += 1
-
-                    tmp = random.randint(1, 4)
-                    if tmp == 1:
-                        play_music("r1", 2)
-                    elif tmp == 2:
-                        play_music("r1", 3)
-                    elif tmp == 3:
-                        play_music("r1", 4)
-                    elif tmp == 4:
-                        play_music("r1", 5)
-
-                    if settings.time_m * 60 + settings.time_s > 15 * 60:
-                        settings.order_music -= 1
-                        settings.music_play_event = True
-                        music_play(15 * 60 - 0.1)
-                    else:
-                        settings.music_play_event = True
-                        music_play(settings.time_m * 60 + settings.time_s - 0.1)
-
-                elif settings.order_music == 3:
-                    settings.order_music = 1
-
-            elif settings.scripts == 1:
-                if settings.order_music == 1:
-                    settings.order_music += 1
-                    play_music("r1", 7)
+                    music_play(15 * 60 - 0.1)
+                else:
                     settings.music_play_event = True
-                    music_play(11)
+                    music_play(settings.time_m * 60 + settings.time_s - 0.1)
 
-                elif settings.order_music == 2:
-                    settings.order_music += 1
-                    tmp = random.randint(1, 4)
-                    if tmp == 1:
-                        play_music("r1", 8)
-                    elif tmp == 2:
-                        play_music("r1", 9)
-                    elif tmp == 3:
-                        play_music("r1", 10)
-                    elif tmp == 4:
-                        play_music("r1", 11)
+            elif settings.order_music == 3:
+                settings.order_music = 1
 
-                    if settings.time_m * 60 + settings.time_s > 15 * 60:
-                        settings.order_music -= 1
-                        settings.music_play_event = True
-                        music_play(15 * 60 - 0.1)
-                    else:
-                        settings.music_play_event = True
-                        music_play(settings.time_m * 60 + settings.time_s - 0.1)
+        elif settings.scripts == 1:
+            if settings.order_music == 1:
+                settings.order_music += 1
+                play_music("r1", 7)
+                settings.music_play_event = True
+                music_play(11)
 
-                elif settings.order_music == 3:
-                    settings.order_music = 1
-    except:
-        pass
+            elif settings.order_music == 2:
+                settings.order_music += 1
+                tmp = random.randint(1, 4)
+                if tmp == 1:
+                    play_music("r1", 8)
+                elif tmp == 2:
+                    play_music("r1", 9)
+                elif tmp == 3:
+                    play_music("r1", 10)
+                elif tmp == 4:
+                    play_music("r1", 11)
+
+                if settings.time_m * 60 + settings.time_s > 15 * 60:
+                    settings.order_music -= 1
+                    settings.music_play_event = True
+                    music_play(15 * 60 - 0.1)
+                else:
+                    settings.music_play_event = True
+                    music_play(settings.time_m * 60 + settings.time_s - 0.1)
+
+            elif settings.order_music == 3:
+                settings.order_music = 1
 
 
 @thread_wraper
 def strobe_music_play(dt):
-    try:
-        while True:
-            dt -= 0.1
-            time.sleep(0.1)
-            if not settings.strobe_music_event:
-                return
-            if dt <= 0:
-                break
-        settings.strobe_music_event = False
-        if settings.bonuses['strobes']:
-            tmp = random.randint(1, 3)
-            print(tmp)
-            if tmp == 1:
-                play_music("r1", 13) #TODO эти треки зарезервированы под связь установлена
-            elif tmp == 2:
-                play_music("r1", 14)
-            elif tmp == 3:
-                play_music("r1", 15)
-    except:
-        pass
+    while True:
+        dt -= 0.1
+        time.sleep(0.1)
+        if not settings.strobe_music_event:
+            return
+        if dt <= 0:
+            break
+    settings.strobe_music_event = False
+    if settings.bonuses['strobes']:
+        tmp = random.randint(1, 3)
+        print(tmp)
+        if tmp == 1:
+            play_music("r1", 13)
+        elif tmp == 2:
+            play_music("r1", 14)
+        elif tmp == 3:
+            play_music("r1", 15)
 
 
 def play_end_music():
-    try:
-        if settings.scripts == 0:
-            play_music("r1", 6)
+    if settings.scripts == 0:
+        play_music("r1", 6)
 
-        if settings.scripts == 1:
-            play_music("r1", 12)
-    except:
-        pass
+    if settings.scripts == 1:
+        play_music("r1", 12)
 
 
 def stop_events():
@@ -1333,14 +1300,30 @@ def stop_events():
         action_shadow_lamp(0)
     if settings.outs['r1:y1']:
         action_runstop_lamp(0)
-    try:
-        stop_music('r1', -1)
-        stop_music('r2', -1)
-        stop_music('r3', -1)
-    except:
-        pass
+    stop_music('r1', -1)
+    stop_music('r2', -1)
+    stop_music('r3', -1)
     if settings.runstop:
         play_end_music()
+
+
+@thread_wraper
+def play_background_music():
+    settings.stop_background_music_event = False
+    while True:
+        play_music("r2", 116)
+        duration = settings.timebox['t44'].value
+        while duration > 0:
+            duration -= 0.1
+            time.sleep(0.1)
+            if settings.stop_background_music_event:
+                stop_background_music()
+                return
+
+
+def stop_background_music():
+    settings.stop_background_music_event = False
+    stop_music('r2', 116)
 
 
 def play_music(rpi: str, track: int):

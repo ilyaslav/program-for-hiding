@@ -23,10 +23,23 @@ class Database:
                 ).fetchall()
             return dict(volume_list)
 
+    def select_tracks(self) -> dict[str, dict[str, int]]:
+        table_name = 'tracks'
+        with self.connection:
+            track_list = self.cursor.execute(
+                f"SELECT rsb, name, number FROM {table_name}"
+                ).fetchall()
+            result: dict[str, dict[str, int]] = {}
+            for rsb, name, number in track_list:
+                if rsb not in result:
+                    result[rsb] = {}
+                result[rsb][name] = number
+            return result
+
     def update_volume_by_rsb(self, rsb, value):
         table_name = 'volumes'
         with self.connection:
-            return self.cursor.execute(f"UPDATE {table_name} SET value = (?) WHERE rsb = {rsb}", (value,))
+            return self.cursor.execute(f"UPDATE {table_name} SET value = (?) WHERE rsb = ?", (value,rsb,))
 
 
 db = Database('settings.db')

@@ -3,6 +3,7 @@ import alsaaudio
 
 class Music():
 	def __init__(self):
+		self.background_track_name = "116"
 		self.tracks = {} # 'track': [state, AudioPlayer()]
 		self.mix = alsaaudio.Mixer()
 
@@ -28,8 +29,9 @@ class Music():
 		try:
 			if track == -1:
 				for track_name in self.tracks:
-					self.tracks[track_name][1].stop()
-					del self.tracks[track_name]
+					if track_name != self.background_track_name:
+						self.tracks[track_name][1].stop()
+						del self.tracks[track_name]
 			if self.tracks.get(track):
 				self.tracks[track][1].stop()
 				del self.tracks[track]

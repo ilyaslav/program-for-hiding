@@ -3,7 +3,7 @@ from enum import Enum
 
 import settings
 from blinker import Blinker
-from game import reset_out, play_music, stop_music, thread_wraper
+from game import reset_out, play_music, stop_music, thread_wraper, play_background_music
 from singleTimer import SingleTimer
 from rpiPing import PingRpi
 
@@ -178,7 +178,7 @@ class Ping:
         time.sleep(3)
         stop_music(self.rpi_2, 115)
         time.sleep(3)
-        play_music(self.rpi_2, 116)
+        play_background_music()
 
     def ping_r2(self):
         reset_out(f"{self.rpi_2}:y16", 1)
@@ -202,12 +202,12 @@ class Ping:
 
     def do_skip_event(self):
         self.start_blinker.start()
-        play_music(self.rpi_2, 116)
+        play_background_music()
         self.ping_r2_event.start()
 
     def play_stop_music(self):
         play_music(self.rpi_2, 117)
-        stop_music(self.rpi_2, 116)
+        settings.stop_background_music_event = True
 
 if __name__ == "__main__":
     pass

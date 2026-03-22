@@ -11,6 +11,7 @@ import settings
 from mainWindow import Ui_MainWindow
 from ping import Ping, PingStatus
 from blinker import Blinker
+from mainSettingsTab import PlayerRow
 
 
 class ThreadClass(QThread):
@@ -43,6 +44,7 @@ class MyWindow(Ui_MainWindow):
         self.start_worker()
         self.connect_functions()
         self.update_volumes()
+        self.load_tracks()
 
     def connect_functions(self):
         self.tab_scripts.get_script1_bt().pressed.connect(self.bt_script1_press)
@@ -161,6 +163,33 @@ class MyWindow(Ui_MainWindow):
         self.tab_system.get_line_edit_rsb1().textEdited.connect(self.edit_volume_rsb1)
         self.tab_system.get_line_edit_rsb2().textEdited.connect(self.edit_volume_rsb2)
         self.tab_system.get_line_edit_rsb3().textEdited.connect(self.edit_volume_rsb3)
+
+        self.tab_main_settings.volume_rows[1].save_btn.pressed.connect(partial(self.save_volume, self.tab_main_settings.volume_rows[1]))
+        self.tab_main_settings.volume_rows[2].save_btn.pressed.connect(partial(self.save_volume, self.tab_main_settings.volume_rows[2]))
+        self.tab_main_settings.volume_rows[3].save_btn.pressed.connect(partial(self.save_volume, self.tab_main_settings.volume_rows[3]))
+        self.tab_main_settings.player_rows[1].play_btn.pressed.connect(partial(self.play_track, self.tab_main_settings.player_rows[1]))
+        self.tab_main_settings.player_rows[1].pause_btn.pressed.connect(partial(self.pause_track, self.tab_main_settings.player_rows[1]))
+        self.tab_main_settings.player_rows[1].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[1]))
+
+    def play_track(self, row: PlayerRow):
+        game.play_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+
+    def pause_track(self, row: PlayerRow):
+        game.pause_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+
+    def stop_track(self, row: PlayerRow):
+        game.stop_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+
+    def save_volume(self, row: PlayerRow):
+        settings.volumes[row.rsb_name] = int(row.volume_edit.text())
+        game.change_volume(row.rsb_name, settings.volumes[row.rsb_name])
+        settings.db.update_volume_by_rsb(row.rsb_name, settings.volumes[row.rsb_name])
+        self.update_volumes()
+
+    def load_tracks(self):
+        for rsb in settings.tracks:
+            for item in settings.tracks[rsb]:
+                self.tab_main_settings.player_rows[int(rsb)].combo.addItem(item)
 
     def start_worker(self):
         self.thread.start()
@@ -545,7 +574,10 @@ class MyWindow(Ui_MainWindow):
             settings.time_event = True
 
     def bt_stop_system_press(self):
+        self.tabWidget.setTabEnabled(1, False)
+        self.tabWidget.setTabEnabled(2, False)
         self.tab_system.start_btn.setDisabled(False)
+        self.tab_system.stop_btn.setDisabled(True)
         self.bt_reset_press()
         self.ping.start_blinker.stop()
         self.ping.play_stop_music()
@@ -1035,6 +1067,9 @@ class MyWindow(Ui_MainWindow):
         self.tab_system.get_line_edit_rsb1().setText(str(settings.volumes['r1']))
         self.tab_system.get_line_edit_rsb2().setText(str(settings.volumes['r2']))
         self.tab_system.get_line_edit_rsb3().setText(str(settings.volumes['r3']))
+
+        for i in range(1, 4):
+            self.tab_main_settings.volume_rows[i].volume_edit.setText(str(settings.volumes[f'r{i}']))
 
         for rpi_name in settings.volumes:
             game.change_volume(rpi_name, settings.volumes[rpi_name])

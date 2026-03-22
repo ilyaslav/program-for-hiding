@@ -13,6 +13,7 @@ from settings_tab import SettingsTab
 from tabDiagnostic import DiagnosticTab
 from tabDiagnosticR2 import DiagnosticTabR2
 from tabDiagnosticR3 import DiagnosticTabR3
+from mainSettingsTab import MainSettingsTab
 from tabScripts import TabScripts
 
 class Ui_MainWindow(object):
@@ -30,7 +31,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setStyleSheet("QTabBar::tab{\n"
 "    font: 75 12pt \"Arial\";                    \n"
 "    height:30;     \n"
-"    width: 150;                \n"
+"    width: 156;                \n"
 "    margin-top:5px;             \n"
 "    margin-right:1px;\n"
 "    margin-left:1px;\n"
@@ -59,6 +60,8 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_diagnostic_r2, "")
         self.tab_diagnostic_r3 = DiagnosticTabR3()
         self.tabWidget.addTab(self.tab_diagnostic_r3, "")
+        self.tab_main_settings = MainSettingsTab()
+        self.tabWidget.addTab(self.tab_main_settings, "")
         self.verticalLayout_3.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -260,9 +263,19 @@ class Ui_MainWindow(object):
         self.tab_diagnostic_r3.ping_on.setText(_translate("MainWindow", "On"))
         self.tab_diagnostic_r3.ping_off.setText(_translate("MainWindow", "Off"))
 
+        self.tab_main_settings.volume_rows[1].label.setText(_translate("MainWindow", "Громкость RSB1"))
+        self.tab_main_settings.volume_rows[2].label.setText(_translate("MainWindow", "Громкость RSB2"))
+        self.tab_main_settings.volume_rows[3].label.setText(_translate("MainWindow", "Громкость RSB3"))
+        self.tab_main_settings.volume_rows[4].label.setText(_translate("MainWindow", "Резерв"))
+        self.tab_main_settings.player_rows[1].label.setText(_translate("MainWindow", "Плеер RSB1"))
+        self.tab_main_settings.player_rows[2].label.setText(_translate("MainWindow", "Плеер RSB2"))
+        self.tab_main_settings.player_rows[3].label.setText(_translate("MainWindow", "Плеер RSB3"))
+        self.tab_main_settings.player_rows[4].label.setText(_translate("MainWindow", "Резерв"))
+
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_system), _translate("MainWindow", "Система"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_scripts), _translate("MainWindow", "Сценарии"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_operator), _translate("MainWindow", "Для оператора"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_diagnostic), _translate("MainWindow", "Диагностика RSB1"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_diagnostic_r2), _translate("MainWindow", "Диагностика RSB2"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_diagnostic_r3), _translate("MainWindow", "Диагностика RSB3"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_system), _translate("MainWindow", "Система"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_main_settings), _translate("MainWindow", "Основные настройки"))
