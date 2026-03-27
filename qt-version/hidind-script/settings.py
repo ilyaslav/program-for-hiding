@@ -105,6 +105,7 @@ timer_event = False
 end_timer_event = False
 time_event = False
 stop_background_music_event = False
+stop_shadow_music_event = False
 
 pings = {
     'r1': PingRpi('r1'),

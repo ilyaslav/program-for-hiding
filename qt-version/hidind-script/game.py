@@ -1226,35 +1226,32 @@ def music_play(dt):
                 settings.order_music = 1
 
         elif settings.scripts == 1:
-            if settings.order_music == 1:
-                settings.order_music += 1
-                play_music("r1", 7)
-                settings.music_play_event = True
-                music_play(11)
+            play_music("r1", 7)
+            time.sleep(11)
+            play_shadow_music()
 
-            elif settings.order_music == 2:
-                settings.order_music += 1
-                tmp = random.randint(1, 4)
-                if tmp == 1:
-                    play_music("r1", 8)
-                elif tmp == 2:
-                    play_music("r1", 9)
-                elif tmp == 3:
-                    play_music("r1", 10)
-                elif tmp == 4:
-                    play_music("r1", 11)
-
-                if settings.time_m * 60 + settings.time_s > 15 * 60:
-                    settings.order_music -= 1
-                    settings.music_play_event = True
-                    music_play(15 * 60 - 0.1)
-                else:
-                    settings.music_play_event = True
-                    music_play(settings.time_m * 60 + settings.time_s - 0.1)
-
-            elif settings.order_music == 3:
-                settings.order_music = 1
-
+@thread_wraper
+def play_shadow_music(dt=0):
+    while dt > 0:
+        dt -= 0.1
+        time.sleep(0.1)
+        if settings.stop_shadow_music_event:
+            return
+    settings.stop_shadow_music_event = False
+    tmp = random.randint(1, 4)
+    if tmp == 1:
+        play_music("r1", 8)
+    elif tmp == 2:
+        play_music("r1", 9)
+    elif tmp == 3:
+        play_music("r1", 10)
+    elif tmp == 4:
+        play_music("r1", 11)
+    track_duration = 15 * 60
+    script_duration = settings.time_m * 60 + settings.time_s
+    duration = script_duration - track_duration
+    if duration > 0:
+        play_shadow_music(track_duration)
 
 @thread_wraper
 def strobe_music_play(dt):

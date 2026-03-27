@@ -170,6 +170,12 @@ class MyWindow(Ui_MainWindow):
         self.tab_main_settings.player_rows[1].play_btn.pressed.connect(partial(self.play_track, self.tab_main_settings.player_rows[1]))
         self.tab_main_settings.player_rows[1].pause_btn.pressed.connect(partial(self.pause_track, self.tab_main_settings.player_rows[1]))
         self.tab_main_settings.player_rows[1].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[1]))
+        self.tab_main_settings.player_rows[2].play_btn.pressed.connect(partial(self.play_track, self.tab_main_settings.player_rows[2]))
+        self.tab_main_settings.player_rows[2].pause_btn.pressed.connect(partial(self.pause_track, self.tab_main_settings.player_rows[2]))
+        self.tab_main_settings.player_rows[2].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[2]))
+        self.tab_main_settings.player_rows[3].play_btn.pressed.connect(partial(self.play_track, self.tab_main_settings.player_rows[3]))
+        self.tab_main_settings.player_rows[3].pause_btn.pressed.connect(partial(self.pause_track, self.tab_main_settings.player_rows[3]))
+        self.tab_main_settings.player_rows[3].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[3]))
 
     def play_track(self, row: PlayerRow):
         game.play_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
