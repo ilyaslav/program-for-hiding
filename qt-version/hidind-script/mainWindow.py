@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
         self.tab_operator.bt_12min.setText(_translate("MainWindow", "12 мин"))
         self.tab_operator.bt_15min.setText(_translate("MainWindow", "15 мин"))
         self.tab_operator.bt_18min.setText(_translate("MainWindow", "18 мин"))
-        self.tab_operator.label_2.setText(_translate("MainWindow", "Обратный отсчет"))
+        self.tab_operator.timer_label.setText(_translate("MainWindow", "Обратный отсчет"))
         self.tab_operator.timer.setText(_translate("MainWindow", "10:00"))
         self.tab_operator.bt_reset.setText(_translate("MainWindow", "Сброс"))
 

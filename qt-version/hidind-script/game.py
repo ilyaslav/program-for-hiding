@@ -5,10 +5,65 @@ import time
 import settings
 from server import Server
 
+
+def handle_guard_input(rpi, inputName, value):
+    if (
+            f"{rpi}:{inputName}" == 'r2:x1'
+            and value == '0'
+            and settings.intro_status == True
+            and settings.start_guard == False
+    ):
+        settings.start_guard = True
+        settings.intro_status = False
+        reset_guard_light(2, 0)
+        play_music("r2", 131)
+    elif (
+            f"{rpi}:{inputName}" == 'r2:x1'
+            and value == '1'
+            and settings.intro_status == False
+            and settings.start_guard == True
+    ):
+        settings.start_guard = False
+        start_game(0)
+        stop_music("r2", 118)
+
+    if f"{rpi}:{inputName}" == 'r3:x1' and value == '1' and settings.animator_pult1 == False:
+        settings.animator_pult1 = True
+        settings.animator_pult1_time = time.time()
+    if (
+            f"{rpi}:{inputName}" == 'r3:x1'
+            and value == '0'
+            and settings.animator_pult1 == True
+            and settings.timebox['t34'] < time.time() - settings.animator_pult1_time
+    ):
+        settings.animator_pult1 = False
+        music_numbers = {1: 135, 2: 136, 3: 137, 4: 138, 5: 139}
+        play_music("r3", music_numbers[settings.animator_pult_order])
+        play_animator_pult(settings.animator_pult_order)
+        settings.animator_pult_order += 1
+        if settings.animator_pult_order == 6:
+            settings.animator_pult_order = 1
+
+    if f"{rpi}:{inputName}" == 'r3:x2' and value == '1' and settings.animator_pult2 == False:
+        settings.animator_pult2 = True
+        settings.animator_pult1_time = time.time()
+    if (
+            f"{rpi}:{inputName}" == 'r3:x1'
+            and value == '0'
+            and settings.animator_pult2 == True
+            and settings.timebox['t40'] < time.time() - settings.animator_pult2_time
+    ):
+        settings.animator_pult2 = False
+        settings.outs["r3:x2"] = not settings.outs["r3:x2"]
+        reset_out("r3:x2", settings.outs["r3:x2"])
+
+
 def message_handler(mes: str):
     try:
         rpi, inputName, value = mes.split(':')
         settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
+        if f"{rpi}:{inputName}" in settings.guard_inputs:
+            handle_guard_input(rpi, inputName, value)
     except Exception as e:
         print(e)
 
@@ -25,6 +80,28 @@ def thread_wraper(func):
             pass
 
     return wraper
+
+
+def wait(duration):
+    """Ожидание с проверкой флага"""
+    while duration > 0:
+        time.sleep(0.1)
+        duration -= 0.1
+        if not settings.intro_status:
+            return False
+    return True
+
+
+def timer_wrapper(func):
+    def wrapper(*args, **kwargs):
+        def run():
+            try:
+                func(wait, *args, **kwargs)
+            except:
+                pass
+        threading.Thread(target=run, daemon=True).start()
+
+    return wrapper
 
 
 def set_standard_settings():
@@ -52,6 +129,13 @@ def set_standard_settings():
     settings.staticUV = [False, False, False, False, False, False, False, False, False]
     set_standart_outs()
     settings.game_status = False
+    settings.intro_status = False
+    settings.start_guard = False
+    settings.animator_pult1 = False
+    settings.animator_pult1_time = -1
+    settings.animator_pult2 = False
+    settings.animator_pult2_time = -1
+    settings.animator_pult_order = 1
 
 
 def set_standart_outs():
@@ -155,6 +239,11 @@ def init_game():
             settings.shadow_event = True
             start_game(0)
             action_shadow(8)
+        elif settings.scripts == 2:
+            settings.start_event = True
+            settings.intro_status = True
+            play_music("r2", 118)
+            play_into()
 
 
 @thread_wraper
@@ -1114,6 +1203,25 @@ def timer_run(dt):
         time.sleep(dt)
 
 
+def calculate_time():
+    if settings.timer_status:
+        return settings.time
+
+    total_min = int(settings.timer.split(":")[0])
+    total_sec = int(settings.timer.split(":")[1])
+    left_min = settings.time_m
+    left_sec = settings.time_s
+
+    total_seconds = total_min * 60 + total_sec
+    left_seconds = left_min * 60 + left_sec
+    elapsed_seconds = total_seconds - left_seconds
+    if elapsed_seconds < 0:
+        elapsed_seconds = 0
+    minutes = elapsed_seconds // 60
+    seconds = elapsed_seconds % 60
+
+    return f"{minutes:02}:{seconds:02}"
+
 def off_all():
     off_fans()
     off_strobes()
@@ -1204,15 +1312,9 @@ def music_play(dt):
             elif settings.order_music == 2:
                 settings.order_music += 1
 
-                tmp = random.randint(1, 4)
-                if tmp == 1:
-                    play_music("r1", 2)
-                elif tmp == 2:
-                    play_music("r1", 3)
-                elif tmp == 3:
-                    play_music("r1", 4)
-                elif tmp == 4:
-                    play_music("r1", 5)
+                random_track_number = random.randint(1, 4)
+                music_numbers = {1: 2, 2: 3, 3: 4, 4: 5}
+                play_music("r1", music_numbers[random_track_number])
 
                 if settings.time_m * 60 + settings.time_s > 15 * 60:
                     settings.order_music -= 1
@@ -1230,6 +1332,11 @@ def music_play(dt):
             time.sleep(11)
             play_shadow_music()
 
+        elif settings.scripts == 2:
+            play_music("r1", 132)
+            time.sleep(11)
+            play_shadow_music()
+
 @thread_wraper
 def play_shadow_music(dt=0):
     while dt > 0:
@@ -1238,15 +1345,9 @@ def play_shadow_music(dt=0):
         if settings.stop_shadow_music_event:
             return
     settings.stop_shadow_music_event = False
-    tmp = random.randint(1, 4)
-    if tmp == 1:
-        play_music("r1", 8)
-    elif tmp == 2:
-        play_music("r1", 9)
-    elif tmp == 3:
-        play_music("r1", 10)
-    elif tmp == 4:
-        play_music("r1", 11)
+    random_track_number = random.randint(1, 4)
+    music_numbers = {1: 8, 2: 9, 3: 10, 4: 11}
+    play_music("r1", music_numbers[random_track_number])
     track_duration = 15 * 60
     script_duration = settings.time_m * 60 + settings.time_s
     duration = script_duration - track_duration
@@ -1309,7 +1410,7 @@ def play_background_music():
     settings.stop_background_music_event = False
     while True:
         play_music("r2", 116)
-        duration = settings.timebox['t44'].value
+        duration = settings.timebox['t44']
         while duration > 0:
             duration -= 0.1
             time.sleep(0.1)
@@ -1362,3 +1463,131 @@ def reset_light_outs(out1_name : str, out1_status: int, out2_name : str, out2_st
         game_server.send_message(f'{out1_name}:{int(out1_status)};')
         settings.outs[out2_name] = bool(out2_status)
         game_server.send_message(f'{out2_name}:{int(out2_status)};')
+
+def reset_guard_outs(value: int):
+    reset_out('r2:y14', int(value))
+    reset_out('r2:y16', int(value))
+
+
+@timer_wrapper
+def play_spot(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_out('r2:y1', 1)
+    if not wait(end_t):
+        return
+
+@timer_wrapper
+def play_mrg1(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y2', 1, 'r2:y3', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y2', 1, 'r2:y3', 0)
+
+@timer_wrapper
+def play_mrg2(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y4', 1, 'r2:y5', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y4', 1, 'r2:y5', 0)
+
+@timer_wrapper
+def play_mrg3(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y6', 1, 'r2:y7', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y6', 1, 'r2:y7', 0)
+
+@timer_wrapper
+def play_mrg4(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y8', 1, 'r2:y9', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y8', 1, 'r2:y9', 0)
+
+@timer_wrapper
+def play_mrg5(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y10', 1, 'r2:y11', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y10', 1, 'r2:y11', 0)
+
+@timer_wrapper
+def play_mrg6(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_light_outs('r2:y12', 1, 'r2:y13', 1)
+    if not wait(end_t):
+        return
+    reset_light_outs('r2:y12', 1, 'r2:y13', 0)
+
+@timer_wrapper
+def play_wardrobe(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_out('r2:y15', 1)
+    if not wait(end_t):
+        return
+
+@timer_wrapper
+def play_animator_signal(start_t, end_t):
+    if not wait(start_t):
+        return
+    reset_out('r2:y17', 1)
+    if not wait(end_t):
+        return
+
+@thread_wraper
+def reset_guard_light(dt):
+    while True:
+        dt -= 0.1
+        time.sleep(0.1)
+        if not settings.start_guard:
+            return
+        if dt <= 0:
+            break
+    reset_light_outs('r2:y2', 0, 'r2:y3', 0)
+    reset_light_outs('r2:y4', 0, 'r2:y5', 0)
+    reset_light_outs('r2:y6', 0, 'r2:y7', 0)
+    reset_light_outs('r2:y8', 0, 'r2:y9', 0)
+    reset_light_outs('r2:y10', 0, 'r2:y11', 0)
+    reset_light_outs('r2:y12', 0, 'r2:y13', 0)
+    reset_light_outs('r2:y14', 0, 'r2:y18', 0)
+    reset_out('r2:y1', 1)
+    reset_out('r2:y15', 1)
+
+intro_events = [
+    (play_spot, 17, 0),
+    (play_mrg1, 25, 3),
+    (play_mrg2, 35, 3),
+    (play_mrg3, 45, 3),
+    (play_mrg4, 55, 3),
+    (play_mrg5, 65, 3),
+    (play_mrg6, 68, 7),
+    (play_wardrobe, 76, 0),
+    (play_animator_signal, 86, 0),
+]
+
+def play_into():
+    for intro_event in intro_events:
+        intro_event, start_t, end_t = intro_event
+        intro_event(start_t, end_t)
+
+def play_animator_pult(dt):
+    reset_out('r3:y1', 1)
+    while True:
+        dt -= 0.1
+        time.sleep(0.1)
+        if dt <= 0:
+            break
+    reset_out('r3:y1', 0)

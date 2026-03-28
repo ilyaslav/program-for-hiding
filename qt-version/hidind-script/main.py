@@ -49,9 +49,10 @@ class MyWindow(Ui_MainWindow):
     def connect_functions(self):
         self.tab_scripts.get_script1_bt().pressed.connect(self.bt_script1_press)
         self.tab_scripts.get_script2_bt().pressed.connect(self.bt_script2_press)
-        # self.tabScripts.get_script3_bt().pressed.connect(self.bt_script3_press)
-        # self.tabScripts.get_script4_bt().pressed.connect(self.bt_script4_press)
-        # self.tabScripts.get_script5_bt().pressed.connect(self.bt_script5_press)
+        self.tab_scripts.get_script3_bt().pressed.connect(self.bt_script3_press)
+        self.tab_scripts.get_script4_bt().pressed.connect(self.bt_script4_press)
+        # self.tab_scripts.get_script5_bt().pressed.connect(self.bt_script5_press)
+
         self.tab_operator.bt_UV.pressed.connect(self.bt_UVlamps_press)
         self.tab_operator.bt_fan.pressed.connect(self.bt_fans_press)
         self.tab_operator.bt_strobe.pressed.connect(self.bt_strobes_press)
@@ -69,6 +70,7 @@ class MyWindow(Ui_MainWindow):
         self.tab_operator.bt_reset.pressed.connect(self.bt_reset_press)
         self.tab_operator.bt_runstop.pressed.connect(self.bt_RUNSTOP_press)
         self.tab_operator.timer.textEdited.connect(self.change_time)
+        self.tab_operator.timer_label.pressed.connect(self.change_timer)
 
         self.tab_diagnostic.bt_uv1_off.pressed.connect(partial(game.action_uv1, 0))
         self.tab_diagnostic.bt_uv1_on.pressed.connect(partial(game.action_uv1, 0))
@@ -220,7 +222,7 @@ class MyWindow(Ui_MainWindow):
         self.reset_OnOff_bt()
         if settings.time_event:
             settings.time_event = False
-            self.tab_operator.timer.setText(settings.time)
+            self.tab_operator.timer.setText(game.calculate_time())
 
         if settings.end_timer_event:
             settings.end_timer_event = False
@@ -572,12 +574,6 @@ class MyWindow(Ui_MainWindow):
         self.disabling_buttons()
         self.reset_OnOff_bt()
         game.init_game()
-        if not settings.runstop:
-            time = settings.timer.split(':')
-            settings.time_m = int(time[0])
-            settings.time_s = int(time[1])
-            settings.time = settings.timer
-            settings.time_event = True
 
     def bt_stop_system_press(self):
         self.tabWidget.setTabEnabled(1, False)
@@ -592,6 +588,7 @@ class MyWindow(Ui_MainWindow):
         game.stop_events()
         self.ping.stop_events()
         game.set_standard_settings()
+        self.bt_script1_press()
         game.off_all()
         self.reset_bt_colors()
         self.disabling_buttons()
@@ -620,18 +617,30 @@ class MyWindow(Ui_MainWindow):
     def bt_script1_press(self):
         settings.scripts = 0
         self.change_scriptbt_color()
+        settings.timer_status = False
+        self.change_timer()
+        game.reset_guard_outs(0)
 
     def bt_script2_press(self):
         settings.scripts = 1
         self.change_scriptbt_color()
+        settings.timer_status = False
+        self.change_timer()
+        game.reset_guard_outs(0)
 
     def bt_script3_press(self):
         settings.scripts = 2
         self.change_scriptbt_color()
+        settings.timer_status = True
+        self.change_timer()
+        game.reset_guard_outs(1)
 
     def bt_script4_press(self):
         settings.scripts = 3
         self.change_scriptbt_color()
+        settings.timer_status = True
+        self.change_timer()
+        game.reset_guard_outs(1)
 
     def bt_script5_press(self):
         settings.scripts = 4
@@ -768,6 +777,14 @@ class MyWindow(Ui_MainWindow):
                 bt_list[i].setStyleSheet('background-color: #ffff00')
             else:
                 bt_list[i].setStyleSheet('background-color: #ffffff')
+
+    def change_timer(self):
+        if settings.timer_status:
+            self.tab_operator.timer_label.setText('Прошло времени')
+        else:
+            self.tab_operator.timer_label.setText('Обратный отсчет')
+        settings.timer_status = not settings.timer_status
+        settings.time_event = True
 
     def change_time(self):
         try:
@@ -1043,9 +1060,9 @@ class MyWindow(Ui_MainWindow):
         else:
             self.tab_scripts.get_script1_bt().setDisabled(False)
             self.tab_scripts.get_script2_bt().setDisabled(False)
-            self.tab_scripts.get_script3_bt().setDisabled(True)
-            self.tab_scripts.get_script4_bt().setDisabled(True)
-            self.tab_scripts.get_script5_bt().setDisabled(True)
+            self.tab_scripts.get_script3_bt().setDisabled(False)
+            self.tab_scripts.get_script4_bt().setDisabled(False)
+            self.tab_scripts.get_script5_bt().setDisabled(False)
             self.tab_operator.bt_5min.setDisabled(False)
             self.tab_operator.bt_8min.setDisabled(False)
             self.tab_operator.bt_10min.setDisabled(False)

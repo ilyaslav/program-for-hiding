@@ -256,20 +256,34 @@ class SettingsTab(QtWidgets.QWidget):
         self.frame_7.setObjectName("frame_7")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frame_7)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.label_2 = QtWidgets.QLabel(self.frame_7)
+        self.timer_label = QtWidgets.QPushButton(self.frame_7)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-        self.label_2.setSizePolicy(sizePolicy)
-        self.label_2.setMaximumSize(QtCore.QSize(400, 16777215))
+        sizePolicy.setHeightForWidth(self.timer_label.sizePolicy().hasHeightForWidth())
+        self.timer_label.setSizePolicy(sizePolicy)
+        self.timer_label.setMaximumSize(QtCore.QSize(400, 16777215))
         font = QtGui.QFont()
         font.setPointSize(32)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout_7.addWidget(self.label_2)
+        self.timer_label.setFont(font)
+        self.timer_label.setStyleSheet("""
+            QPushButton {
+                color: rgb(255, 255, 255);
+                background-color: transparent;
+                border: none;
+            }
+            QPushButton:hover {
+                color: rgb(255, 255, 255);
+            }
+            QPushButton:pressed {
+                color: rgb(200, 200, 200);  /* легкий эффект нажатия (можно убрать) */
+            }
+        """)
+        self.timer_label.setFlat(True)
+        self.timer_label.setCursor(QtCore.Qt.PointingHandCursor)
+        self.timer_label.setText("ТВОЙ ТЕКСТ")
+        self.timer_label.setObjectName("timer_label")
+        self.verticalLayout_7.addWidget(self.timer_label)
         self.timer = QtWidgets.QLineEdit(self.frame_7)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)

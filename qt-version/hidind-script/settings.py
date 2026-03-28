@@ -6,6 +6,7 @@ timebox = db.select_times()
 volumes = db.select_volumes()
 tracks = db.select_tracks()
 
+timer_status = True
 scripts = 0
 timer = "10:00"
 time = "10:00"
@@ -152,4 +153,18 @@ button_config = [
     {'outputs': ['r3:y1'], 'tab': 'tab_diagnostic_r3', 'buttons': ['mask_off', 'mask_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r3:y2'], 'tab': 'tab_diagnostic_r3', 'buttons': ['light_off', 'light_on', None], 'logic': 'standard', 'inverted': False},
     {'outputs': ['r3:y38'], 'tab': 'tab_diagnostic_r3', 'buttons': ['ping_off', 'ping_on', None], 'logic': 'standard', 'inverted': False},
+]
+
+intro_status = False
+start_guard = False
+animator_pult1 = False
+animator_pult2 = False
+animator_pult1_time = -1
+animator_pult2_time = -1
+animator_pult_order = 1
+
+guard_inputs = [
+    'r2:x1',
+    'r3:x1',
+    'r3:x2',
 ]
