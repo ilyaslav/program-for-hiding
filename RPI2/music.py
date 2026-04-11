@@ -27,7 +27,7 @@ class Music():
 
 	def stop(self, track):
 		try:
-			if track == -1:
+			if track == '-1':
 				for track_name in self.tracks:
 					if track_name != self.background_track_name:
 						self.tracks[track_name][1].stop()

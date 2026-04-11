@@ -48,8 +48,8 @@ class Ping:
         self.ping_input = 'x40'
         self.rpi_2 = "r2"
         self.ping_timout = settings.timebox['t24']
-        # self.ping_range = int(settings.timebox['t25'])
-        self.ping_range = 3
+        self.ping_range = int(settings.timebox['t25'])
+        # self.ping_range = 3
         self.start_blink_interval = settings.timebox['t26']
         self.r2_blink_interval = settings.timebox['t27']
         self.start_blinker = Blinker(self.blink_start_button, self.start_blink_interval)

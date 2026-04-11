@@ -26,7 +26,7 @@ class Music():
 
 	def stop(self, track):
 		try:
-			if track == -1:
+			if track == '-1':
 				for track_name in self.tracks:
 					self.tracks[track_name][1].stop()
 					del self.tracks[track_name]

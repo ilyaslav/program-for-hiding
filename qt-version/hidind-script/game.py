@@ -7,6 +7,7 @@ from server import Server
 
 
 def handle_guard_input(rpi, inputName, value):
+    print(f"{rpi}:{inputName}" == 'r2:x1', value, settings.intro_status, settings.start_guard)
     if (
             f"{rpi}:{inputName}" == 'r2:x1'
             and value == '0'
@@ -15,7 +16,6 @@ def handle_guard_input(rpi, inputName, value):
     ):
         settings.start_guard = True
         settings.intro_status = False
-        reset_guard_light(2, 0)
         play_music("r2", 131)
     elif (
             f"{rpi}:{inputName}" == 'r2:x1'
@@ -24,8 +24,10 @@ def handle_guard_input(rpi, inputName, value):
             and settings.start_guard == True
     ):
         settings.start_guard = False
+        reset_guard_light(2)
         start_game(0)
         stop_music("r2", 118)
+        play_background_music()
 
     if f"{rpi}:{inputName}" == 'r3:x1' and value == '1' and settings.animator_pult1 == False:
         settings.animator_pult1 = True
@@ -58,17 +60,21 @@ def handle_guard_input(rpi, inputName, value):
         reset_out("r3:x2", settings.outs["r3:x2"])
 
 
-def message_handler(mes: str):
+def message_handler(mes):
     try:
+        print(mes)
         rpi, inputName, value = mes.split(':')
-        settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
+        if rpi == 'r1':
+            settings.inputs[f"{rpi}:{inputName}"] = not bool(int(value))
+        else:
+            settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
         if f"{rpi}:{inputName}" in settings.guard_inputs:
             handle_guard_input(rpi, inputName, value)
     except Exception as e:
         print(e)
 
 
-game_server = Server()
+game_server = Server(message_handler)
 threading.Thread(target=game_server.start_server, daemon=True).start()
 
 
@@ -96,7 +102,7 @@ def timer_wrapper(func):
     def wrapper(*args, **kwargs):
         def run():
             try:
-                func(wait, *args, **kwargs)
+                func(*args, **kwargs)
             except:
                 pass
         threading.Thread(target=run, daemon=True).start()
@@ -136,6 +142,8 @@ def set_standard_settings():
     settings.animator_pult2 = False
     settings.animator_pult2_time = -1
     settings.animator_pult_order = 1
+    if not settings.background_music:
+        play_background_music()
 
 
 def set_standart_outs():
@@ -242,6 +250,7 @@ def init_game():
         elif settings.scripts == 2:
             settings.start_event = True
             settings.intro_status = True
+            settings.stop_background_music_event = True
             play_music("r2", 118)
             play_into()
 
@@ -1334,8 +1343,6 @@ def music_play(dt):
 
         elif settings.scripts == 2:
             play_music("r1", 132)
-            time.sleep(11)
-            play_shadow_music()
 
 @thread_wraper
 def play_shadow_music(dt=0):
@@ -1410,6 +1417,7 @@ def play_background_music():
     settings.stop_background_music_event = False
     while True:
         play_music("r2", 116)
+        settings.background_music = True
         duration = settings.timebox['t44']
         while duration > 0:
             duration -= 0.1
@@ -1421,6 +1429,7 @@ def play_background_music():
 
 def stop_background_music():
     settings.stop_background_music_event = False
+    settings.background_music = False
     stop_music('r2', 116)
 
 
@@ -1552,8 +1561,6 @@ def reset_guard_light(dt):
     while True:
         dt -= 0.1
         time.sleep(0.1)
-        if not settings.start_guard:
-            return
         if dt <= 0:
             break
     reset_light_outs('r2:y2', 0, 'r2:y3', 0)
@@ -1563,19 +1570,19 @@ def reset_guard_light(dt):
     reset_light_outs('r2:y10', 0, 'r2:y11', 0)
     reset_light_outs('r2:y12', 0, 'r2:y13', 0)
     reset_light_outs('r2:y14', 0, 'r2:y18', 0)
-    reset_out('r2:y1', 1)
+    reset_out('r2:y1', 0)
     reset_out('r2:y15', 1)
 
 intro_events = [
-    (play_spot, 17, 0),
-    (play_mrg1, 25, 3),
-    (play_mrg2, 35, 3),
-    (play_mrg3, 45, 3),
-    (play_mrg4, 55, 3),
-    (play_mrg5, 65, 3),
-    (play_mrg6, 68, 7),
-    (play_wardrobe, 76, 0),
-    (play_animator_signal, 86, 0),
+    (play_spot, settings.timebox['t45'], 0),
+    (play_mrg1, settings.timebox['t46'], settings.timebox['t47']),
+    (play_mrg2, settings.timebox['t48'], settings.timebox['t49']),
+    (play_mrg3, settings.timebox['t50'], settings.timebox['t51']),
+    (play_mrg4, settings.timebox['t52'], settings.timebox['t53']),
+    (play_mrg5, settings.timebox['t54'], settings.timebox['t55']),
+    (play_mrg6, settings.timebox['t56'], settings.timebox['t57']),
+    (play_wardrobe, settings.timebox['t58'], 0),
+    (play_animator_signal, settings.timebox['t59'], 0),
 ]
 
 def play_into():

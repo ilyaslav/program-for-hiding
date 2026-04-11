@@ -1,15 +1,14 @@
 import socket
 from select import select
 import itertools
-import settings
-
 
 class Server:
-	def __init__(self):
+	def __init__(self, message_handler):
 		self.HOST = self.get_local_ip()
 		self.PORT = 1111
 		self.connections = []
 		self.messages = []
+		self.message_handler = message_handler
 
 	def get_local_ip(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -64,18 +63,6 @@ class Server:
 
 	def init_settings(self):
 		pass
-
-
-	def message_handler(self, mes):
-		try:
-			print(mes)
-			rpi, inputName, value = mes.split(':')
-			if rpi == 'r1':
-				settings.inputs[f"{rpi}:{inputName}"] = not bool(int(value))
-			else:
-				settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
-		except Exception as e:
-			print(e)
 
 
 	def send_message(self, message):
