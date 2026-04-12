@@ -49,7 +49,7 @@ class Ping:
         self.rpi_2 = "r2"
         self.ping_timout = settings.timebox['t24']
         self.ping_range = int(settings.timebox['t25'])
-        # self.ping_range = 3
+        # self.ping_range = 3 #TODO
         self.start_blink_interval = settings.timebox['t26']
         self.r2_blink_interval = settings.timebox['t27']
         self.start_blinker = Blinker(self.blink_start_button, self.start_blink_interval)
@@ -170,13 +170,13 @@ class Ping:
         reset_out(self.start_button_out, settings.outs[self.start_button_out])
 
     def play_track_connection_success(self):
-        play_music(self.rpi_2, 115)
+        play_music(115)
         time.sleep(3)
-        stop_music(self.rpi_2, 115)
+        stop_music(115)
         time.sleep(6)
-        play_music(self.rpi_2, 115)
+        play_music(115)
         time.sleep(3)
-        stop_music(self.rpi_2, 115)
+        stop_music(115)
         time.sleep(3)
         play_background_music()
 
@@ -206,7 +206,7 @@ class Ping:
         self.ping_r2_event.start()
 
     def play_stop_music(self):
-        play_music(self.rpi_2, 117)
+        play_music(117)
         settings.stop_background_music_event = True
 
 if __name__ == "__main__":

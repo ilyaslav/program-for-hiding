@@ -51,7 +51,7 @@ class MyWindow(Ui_MainWindow):
         self.tab_scripts.get_script2_bt().pressed.connect(self.bt_script2_press)
         self.tab_scripts.get_script3_bt().pressed.connect(self.bt_script3_press)
         self.tab_scripts.get_script4_bt().pressed.connect(self.bt_script4_press)
-        # self.tab_scripts.get_script5_bt().pressed.connect(self.bt_script5_press)
+        self.tab_scripts.get_script5_bt().pressed.connect(self.bt_script5_press)
 
         self.tab_operator.bt_UV.pressed.connect(self.bt_UVlamps_press)
         self.tab_operator.bt_fan.pressed.connect(self.bt_fans_press)
@@ -180,13 +180,13 @@ class MyWindow(Ui_MainWindow):
         self.tab_main_settings.player_rows[3].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[3]))
 
     def play_track(self, row: PlayerRow):
-        game.play_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+        game.play_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
 
     def pause_track(self, row: PlayerRow):
-        game.pause_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+        game.pause_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
 
     def stop_track(self, row: PlayerRow):
-        game.stop_music(row.rsb_name, settings.tracks[row.rsb_name[1]][row.combo.currentText()])
+        game.stop_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
 
     def save_volume(self, row: PlayerRow):
         settings.volumes[row.rsb_name] = int(row.volume_edit.text())
@@ -195,8 +195,8 @@ class MyWindow(Ui_MainWindow):
         self.update_volumes()
 
     def load_tracks(self):
-        for rsb in settings.tracks:
-            for item in settings.tracks[rsb]:
+        for rsb in settings.tracks_name_key:
+            for item in settings.tracks_name_key[rsb]:
                 self.tab_main_settings.player_rows[int(rsb)].combo.addItem(item)
 
     def start_worker(self):
@@ -349,80 +349,96 @@ class MyWindow(Ui_MainWindow):
         self.tab_scripts.get_script2_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №2")
         self.tab_scripts.get_script3_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №3")
         self.tab_scripts.get_script4_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №4")
+        self.tab_scripts.get_script5_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №4")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: red; font-size: 13px; padding: 2px;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: red; font-size: 13px; padding: 2px;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: red; font-size: 13px; padding: 2px;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: red; font-size: 13px; padding: 2px;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: red; font-size: 13px; padding: 2px;")
 
     def set_ping_script2(self):
         self.tab_scripts.get_script1_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script2_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script3_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №9")
         self.tab_scripts.get_script4_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №10")
+        self.tab_scripts.get_script5_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №10")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: orange;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: orange;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: orange;")
 
     def set_ping_script3(self):
         self.tab_scripts.get_script1_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №1")
         self.tab_scripts.get_script2_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №2")
         self.tab_scripts.get_script3_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №11")
         self.tab_scripts.get_script4_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №12")
+        self.tab_scripts.get_script5_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №12")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: orange;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: orange;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: orange;")
 
     def set_ping_script4(self):
         self.tab_scripts.get_script1_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №1")
         self.tab_scripts.get_script2_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №2")
         self.tab_scripts.get_script3_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №13")
         self.tab_scripts.get_script4_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №14")
+        self.tab_scripts.get_script5_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №14")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: orange;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: orange;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: orange;")
 
     def set_ping_script5(self):
         self.tab_scripts.get_script1_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script2_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script3_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №7")
         self.tab_scripts.get_script4_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №8")
+        self.tab_scripts.get_script5_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №8")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: orange;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: orange;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: orange;")
 
     def set_ping_script6(self):
         self.tab_scripts.get_script1_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script2_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script3_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №5")
         self.tab_scripts.get_script4_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №6")
+        self.tab_scripts.get_script5_label().setText("Сценарий доступен с ограничениями.\nСм. «Ошибка №6")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: orange;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: orange;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: orange;")
 
     def set_ping_script7(self):
         self.tab_scripts.get_script1_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №1")
         self.tab_scripts.get_script2_label().setText("Сценарий НЕ доступен. Есть вариации\nСм. «Ошибка №2")
         self.tab_scripts.get_script3_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script4_label().setText("\nСценарий доступен")
+        self.tab_scripts.get_script5_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: red;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: white;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: white;")
 
     def set_ping_script8(self):
         self.tab_scripts.get_script1_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script2_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script3_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script4_label().setText("\nСценарий доступен")
+        self.tab_scripts.get_script5_label().setText("\nСценарий доступен")
         self.tab_scripts.get_script1_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script2_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script3_label().setStyleSheet("background-color: white;")
         self.tab_scripts.get_script4_label().setStyleSheet("background-color: white;")
+        self.tab_scripts.get_script5_label().setStyleSheet("background-color: white;")
 
     def display_ping_event(self):
         if self.ping.display_ping_event:

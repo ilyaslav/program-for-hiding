@@ -4,7 +4,8 @@ from rpiPing import PingRpi
 db = Database("settings.db")
 timebox = db.select_times()
 volumes = db.select_volumes()
-tracks = db.select_tracks()
+tracks_name_key = db.select_tracks_key_name()
+tracks_number_rsb = db.select_tracks_key_number()
 
 timer_status = True
 scripts = 0
@@ -163,9 +164,5 @@ animator_pult2 = False
 animator_pult1_time = -1
 animator_pult2_time = -1
 animator_pult_order = 1
-
-guard_inputs = [
-    'r2:x1',
-    'r3:x1',
-    'r3:x2',
-]
+animator_call = 3
+animator_call_time = -1

@@ -16,7 +16,7 @@ def handle_guard_input(rpi, inputName, value):
     ):
         settings.start_guard = True
         settings.intro_status = False
-        play_music("r2", 131)
+        play_music(131)
     elif (
             f"{rpi}:{inputName}" == 'r2:x1'
             and value == '1'
@@ -26,7 +26,7 @@ def handle_guard_input(rpi, inputName, value):
         settings.start_guard = False
         reset_guard_light(2)
         start_game(0)
-        stop_music("r2", 118)
+        stop_music(118)
         play_background_music()
 
     if f"{rpi}:{inputName}" == 'r3:x1' and value == '1' and settings.animator_pult1 == False:
@@ -39,11 +39,11 @@ def handle_guard_input(rpi, inputName, value):
             and settings.timebox['t34'] < time.time() - settings.animator_pult1_time
     ):
         settings.animator_pult1 = False
-        music_numbers = {1: 135, 2: 136, 3: 137, 4: 138, 5: 139}
-        play_music("r3", music_numbers[settings.animator_pult_order])
+        music_numbers = {1: 135, 2: 136, 3: 137, 4: 138, 5: 139, 6: 140}
+        play_music(music_numbers[settings.animator_pult_order])
         play_animator_pult(settings.animator_pult_order)
         settings.animator_pult_order += 1
-        if settings.animator_pult_order == 6:
+        if settings.animator_pult_order == 7:
             settings.animator_pult_order = 1
 
     if f"{rpi}:{inputName}" == 'r3:x2' and value == '1' and settings.animator_pult2 == False:
@@ -59,16 +59,29 @@ def handle_guard_input(rpi, inputName, value):
         settings.outs["r3:x2"] = not settings.outs["r3:x2"]
         reset_out("r3:x2", settings.outs["r3:x2"])
 
+    if f"{rpi}:{inputName}" == 'r1:x1' and value == '1' and settings.animator_call < 3:
+        settings.animator_call_time = time.time()
+    if (
+            f"{rpi}:{inputName}" == 'r1:x1'
+            and value == '0'
+            and settings.timebox['t33'] < time.time() - settings.animator_call_time
+    ):
+        settings.animator_call += 1
+        track_numbers = {1: 133, 2: 134}
+        play_music(track_numbers[settings.animator_call])
+        action_shadow_lamp(0)
+        action_shadow_lamp(1)
+
 
 def message_handler(mes):
     try:
         print(mes)
         rpi, inputName, value = mes.split(':')
         if rpi == 'r1':
-            settings.inputs[f"{rpi}:{inputName}"] = not bool(int(value))
+            settings.inputs[f"{rpi}:{inputName}"] = not bool(int(value)) # входные сигналы инвертированы
         else:
             settings.inputs[f"{rpi}:{inputName}"] = bool(int(value))
-        if f"{rpi}:{inputName}" in settings.guard_inputs:
+        if settings.scripts in (2, 3, 4):
             handle_guard_input(rpi, inputName, value)
     except Exception as e:
         print(e)
@@ -142,6 +155,9 @@ def set_standard_settings():
     settings.animator_pult2 = False
     settings.animator_pult2_time = -1
     settings.animator_pult_order = 1
+    settings.stop_shadow_music_event = True
+    settings.animator_call = 3
+    settings.animator_call_time = -1
     if not settings.background_music:
         play_background_music()
 
@@ -241,7 +257,7 @@ def init_game():
         if settings.scripts == 0:
             settings.start_event = True
             start_game(settings.timebox['t2'])
-            play_music("r1", 16)
+            play_music(16)
         elif settings.scripts == 1:
             settings.start_event = True
             settings.shadow_event = True
@@ -251,7 +267,7 @@ def init_game():
             settings.start_event = True
             settings.intro_status = True
             settings.stop_background_music_event = True
-            play_music("r2", 118)
+            play_music(118)
             play_into()
 
 
@@ -285,13 +301,16 @@ def start_game(dt):
             strobe_music_play(settings.timebox['t19'] - settings.timebox['t20'])
             strobe_activation(settings.timebox['t19'])
 
-            if settings.scripts == 0:
+            if settings.scripts in (0, 4):
                 settings.shadow_lamp_enent = True
                 shadow_lamp_activation(settings.time_m * 60 + settings.time_s - settings.timebox['t4'])
 
-            elif settings.scripts == 1:
+            elif settings.scripts in (1, 3):
                 settings.shadow_lamp_enent = True
                 shadow_lamp_activation(settings.time_m * 60 + settings.time_s - settings.timebox['t9'])
+
+            if settings.scripts in (2, 3, 4):
+                settings.animator_call = 0
     except Exception as e:
         print(e)
 
@@ -1186,15 +1205,15 @@ def timer_run(dt):
         settings.time_event = True
 
         if settings.time_m == 1 and settings.time_s == 0 and settings.scripts == 1 and settings.timer != "05:00":
-            play_music("r1", 17)
+            play_music(17)
         elif settings.time_m == 2 and settings.time_s == 0 and settings.scripts == 1:
-            play_music("r1", 18)
+            play_music(18)
         elif settings.time_m == 3 and settings.time_s == 0 and settings.scripts == 1:
-            play_music("r1", 19)
+            play_music(19)
         elif settings.time_m == 4 and settings.time_s == 0 and settings.scripts == 1:
-            play_music("r1", 20)
+            play_music(20)
         elif settings.time_m == 5 and settings.time_s == 0 and settings.scripts == 1:
-            play_music("r1", 21)
+            play_music(21)
 
         if settings.time_m == 0 and settings.time_s == 0 or not settings.runstop:
             settings.order = 1
@@ -1310,11 +1329,11 @@ def music_play(dt):
             break
     settings.music_play_event = False
     if settings.runstop:
-        if settings.scripts == 0:
+        if settings.scripts in (0, 4):
             if settings.order_music == 1:
                 settings.order_music += 1
 
-                play_music("r1", 1)
+                play_music(1)
                 settings.music_play_event = True
                 music_play(6)
 
@@ -1323,7 +1342,7 @@ def music_play(dt):
 
                 random_track_number = random.randint(1, 4)
                 music_numbers = {1: 2, 2: 3, 3: 4, 4: 5}
-                play_music("r1", music_numbers[random_track_number])
+                play_music(music_numbers[random_track_number])
 
                 if settings.time_m * 60 + settings.time_s > 15 * 60:
                     settings.order_music -= 1
@@ -1336,25 +1355,25 @@ def music_play(dt):
             elif settings.order_music == 3:
                 settings.order_music = 1
 
-        elif settings.scripts == 1:
-            play_music("r1", 7)
-            time.sleep(11)
-            play_shadow_music()
+        elif settings.scripts in (1, 3):
+            play_music(7)
+            play_shadow_music(11)
 
         elif settings.scripts == 2:
-            play_music("r1", 132)
+            play_music(16)
+            play_shadow_music(120)
 
 @thread_wraper
 def play_shadow_music(dt=0):
+    settings.stop_shadow_music_event = False
     while dt > 0:
         dt -= 0.1
         time.sleep(0.1)
         if settings.stop_shadow_music_event:
             return
-    settings.stop_shadow_music_event = False
     random_track_number = random.randint(1, 4)
     music_numbers = {1: 8, 2: 9, 3: 10, 4: 11}
-    play_music("r1", music_numbers[random_track_number])
+    play_music(music_numbers[random_track_number])
     track_duration = 15 * 60
     script_duration = settings.time_m * 60 + settings.time_s
     duration = script_duration - track_duration
@@ -1375,19 +1394,19 @@ def strobe_music_play(dt):
         tmp = random.randint(1, 3)
         print(tmp)
         if tmp == 1:
-            play_music("r1", 13)
+            play_music(13)
         elif tmp == 2:
-            play_music("r1", 14)
+            play_music(14)
         elif tmp == 3:
-            play_music("r1", 15)
+            play_music(15)
 
 
 def play_end_music():
     if settings.scripts == 0:
-        play_music("r1", 6)
+        play_music(6)
 
     if settings.scripts == 1:
-        play_music("r1", 12)
+        play_music(12)
 
 
 def stop_events():
@@ -1405,9 +1424,7 @@ def stop_events():
         action_shadow_lamp(0)
     if settings.outs['r1:y1']:
         action_runstop_lamp(0)
-    stop_music('r1', -1)
-    stop_music('r2', -1)
-    stop_music('r3', -1)
+    stop_music(-1)
     if settings.runstop:
         play_end_music()
 
@@ -1416,7 +1433,7 @@ def stop_events():
 def play_background_music():
     settings.stop_background_music_event = False
     while True:
-        play_music("r2", 116)
+        play_music(116)
         settings.background_music = True
         duration = settings.timebox['t44']
         while duration > 0:
@@ -1430,19 +1447,27 @@ def play_background_music():
 def stop_background_music():
     settings.stop_background_music_event = False
     settings.background_music = False
-    stop_music('r2', 116)
+    stop_music(116)
 
 
-def play_music(rpi: str, track: int):
-    game_server.send_message(f'{rpi}:play:{track};')
+def play_music(track: int):
+    for rpi in settings.tracks_number_rsb[track]:
+        game_server.send_message(f'{rpi}:play:{track};')
 
 
-def pause_music(rpi: str, track: int):
-    game_server.send_message(f'{rpi}:pause:{track};')
+def pause_music(track: int):
+    for rpi in settings.tracks_number_rsb[track]:
+        game_server.send_message(f'{rpi}:pause:{track};')
 
 
-def stop_music(rpi: str, track: int):
-    game_server.send_message(f'{rpi}:stop:{track};')
+def stop_music(track: int):
+    if track == -1:
+        game_server.send_message(f'r1:stop:{track};')
+        game_server.send_message(f'r2:stop:{track};')
+        game_server.send_message(f'r3:stop:{track};')
+    else:
+        for rpi in settings.tracks_number_rsb[track]:
+            game_server.send_message(f'{rpi}:stop:{track};')
 
 
 def change_volume(rpi: str, volume: int):
@@ -1572,6 +1597,7 @@ def reset_guard_light(dt):
     reset_light_outs('r2:y14', 0, 'r2:y18', 0)
     reset_out('r2:y1', 0)
     reset_out('r2:y15', 1)
+    reset_out('r2:y17', 0)
 
 intro_events = [
     (play_spot, settings.timebox['t45'], 0),

@@ -76,7 +76,7 @@ class Ui_MainWindow(object):
         self.tab_scripts.get_script2_bt().setText(_translate("MainWindow", "Поиск душ"))
         self.tab_scripts.get_script3_bt().setText(_translate("MainWindow", "Хранитель"))
         self.tab_scripts.get_script4_bt().setText(_translate("MainWindow", "Хранитель/Души"))
-        self.tab_scripts.get_script5_bt().setText(_translate("MainWindow", "По следам теней"))
+        self.tab_scripts.get_script5_bt().setText(_translate("MainWindow", "Хранитель/Прятки"))
         self.tab_scripts.get_script6_bt().setText(_translate("MainWindow", "Резерв"))
         self.tab_scripts.get_script7_bt().setText(_translate("MainWindow", "Резерв"))
         self.tab_scripts.get_script8_bt().setText(_translate("MainWindow", "Резерв"))
