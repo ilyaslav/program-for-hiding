@@ -93,7 +93,6 @@ class Ping:
             time.sleep(self.ping_timout)
             if self.check_status():
                 self.status = PingStatus.READY
-                self.display_ping_event = True
                 self.connection_success_play.start()
                 self.start_blinker.start()
                 self.ping_r2_event.start()
@@ -110,7 +109,7 @@ class Ping:
         else:
             self.status = PingStatus.WAITING
             self.stop_events()
-        self.display_ping_event = True
+            self.display_ping_event = True
 
     def do_ping_out(self, rpi: PingRpi):
         rpi.ping_status = not rpi.ping_status
@@ -193,6 +192,7 @@ class Ping:
         self.reset_r2_blinked_outs(False)
         time.sleep(2)
         reset_out(f"{self.rpi_2}:y16", 0)
+        self.display_ping_event = True
 
     def stop_events(self):
         self.start_blinker.stop()

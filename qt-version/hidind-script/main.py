@@ -180,13 +180,13 @@ class MyWindow(Ui_MainWindow):
         self.tab_main_settings.player_rows[3].stop_btn.pressed.connect(partial(self.stop_track, self.tab_main_settings.player_rows[3]))
 
     def play_track(self, row: PlayerRow):
-        game.play_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
+        game.play_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()], row.rsb_name)
 
     def pause_track(self, row: PlayerRow):
-        game.pause_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
+        game.pause_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()], row.rsb_name)
 
     def stop_track(self, row: PlayerRow):
-        game.stop_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()])
+        game.stop_music(settings.tracks_name_key[row.rsb_name[1]][row.combo.currentText()], row.rsb_name)
 
     def save_volume(self, row: PlayerRow):
         settings.volumes[row.rsb_name] = int(row.volume_edit.text())
@@ -654,13 +654,16 @@ class MyWindow(Ui_MainWindow):
     def bt_script4_press(self):
         settings.scripts = 3
         self.change_scriptbt_color()
-        settings.timer_status = True
+        settings.timer_status = False
         self.change_timer()
-        game.reset_guard_outs(1)
+        game.reset_guard_outs(0)
 
     def bt_script5_press(self):
         settings.scripts = 4
         self.change_scriptbt_color()
+        settings.timer_status = False
+        self.change_timer()
+        game.reset_guard_outs(0)
 
     def bt_UVlamps_press(self):
         settings.bonuses['UVlamps'] = not settings.bonuses['UVlamps']
@@ -1017,6 +1020,7 @@ class MyWindow(Ui_MainWindow):
             ('r2:x40', 'tab_diagnostic_r2', 'ping_input', False),
             ('r3:x1', 'tab_diagnostic_r3', 'animator_input', False),
             ('r3:x2', 'tab_diagnostic_r3', 'light_input', False),
+            ('r3:x3', 'tab_diagnostic_r3', 'animator_game_off', False),
             ('r3:x40', 'tab_diagnostic_r3', 'ping_input', False),
         ]
 

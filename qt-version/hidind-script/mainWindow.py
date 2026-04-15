@@ -221,8 +221,8 @@ class Ui_MainWindow(object):
         self.tab_diagnostic_r2.ping_off.setText(_translate("MainWindow", "Off"))
 
         self.tab_diagnostic_r3.animator_input.setText(_translate("MainWindow", "Сигнал от\nаниматора"))
-        self.tab_diagnostic_r3.light_input.setText(_translate("MainWindow", "Резерв"))
-        self.tab_diagnostic_r3.reserve_1.setText(_translate("MainWindow", "Резерв"))
+        self.tab_diagnostic_r3.light_input.setText(_translate("MainWindow", "Свет на площадке"))
+        self.tab_diagnostic_r3.animator_game_off.setText(_translate("MainWindow", "Остановка игры"))
         self.tab_diagnostic_r3.reserve_2.setText(_translate("MainWindow", "Резерв"))
         self.tab_diagnostic_r3.reserve_3.setText(_translate("MainWindow", "Резерв"))
         self.tab_diagnostic_r3.ping_input.setText(_translate("MainWindow", "Проверка связи"))

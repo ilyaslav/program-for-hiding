@@ -7,7 +7,9 @@ from server import Server
 
 
 def handle_guard_input(rpi, inputName, value):
-    print(f"{rpi}:{inputName}" == 'r2:x1', value, settings.intro_status, settings.start_guard)
+    if settings.scripts not in (2, 3, 4) and not settings.runstop:
+        return
+    
     if (
             f"{rpi}:{inputName}" == 'r2:x1'
             and value == '0'
@@ -40,8 +42,16 @@ def handle_guard_input(rpi, inputName, value):
     ):
         settings.animator_pult1 = False
         music_numbers = {1: 135, 2: 136, 3: 137, 4: 138, 5: 139, 6: 140}
+        mask_times = {
+            1: (settings.timebox['t61'], settings.timebox['t62']),
+            2: (settings.timebox['t63'], settings.timebox['t64']),
+            3: (settings.timebox['t65'], settings.timebox['t66']),
+            4: (settings.timebox['t67'], settings.timebox['t68']),
+            5: (settings.timebox['t69'], settings.timebox['t70']),
+            6: (settings.timebox['t71'], settings.timebox['t72']),
+        }
         play_music(music_numbers[settings.animator_pult_order])
-        play_animator_pult(settings.animator_pult_order)
+        play_animator_pult(mask_times[settings.animator_pult_order][0], mask_times[settings.animator_pult_order][1])
         settings.animator_pult_order += 1
         if settings.animator_pult_order == 7:
             settings.animator_pult_order = 1
@@ -143,11 +153,13 @@ def set_standard_settings():
     settings.bonus_time = 1
     settings.runstop = False
     settings.start_run_time = -1
+    settings.start_run_time_pult = -1
     settings.fans_run_time = [0, 0, 0, 0]
     settings.fan_strobe = False
     settings.staticUV = [False, False, False, False, False, False, False, False, False]
     set_standart_outs()
     settings.game_status = False
+    settings.game_status_pult = False
     settings.intro_status = False
     settings.start_guard = False
     settings.animator_pult1 = False
@@ -226,6 +238,21 @@ def check_start():
         settings.start_run_time = -1
         settings.start_button_release = True
 
+    if settings.inputs['r3:x3'] == True and not settings.game_status_pult:
+        settings.start_run_time_pult = time.time()
+        settings.game_status_pult = True
+
+    if settings.game_status_pult and settings.start_button_release_pult:
+        if settings.timebox['t60'] < time.time() - settings.start_run_time_pult:
+            settings.game_status_pult = False
+            settings.start_run_time_pult = -1
+            settings.start_button_release_pult = False
+            return True
+
+    if settings.inputs['r3:x3'] == False:
+        settings.game_status_pult = False
+        settings.start_run_time_pult = -1
+        settings.start_button_release_pult = True
 
 def check_fans():
     for i in range(4):
@@ -254,11 +281,11 @@ def check_fans():
 
 def init_game():
     if settings.runstop:
-        if settings.scripts == 0:
+        if settings.scripts in (0, 4):
             settings.start_event = True
             start_game(settings.timebox['t2'])
             play_music(16)
-        elif settings.scripts == 1:
+        elif settings.scripts in (1, 3):
             settings.start_event = True
             settings.shadow_event = True
             start_game(0)
@@ -1450,24 +1477,33 @@ def stop_background_music():
     stop_music(116)
 
 
-def play_music(track: int):
+def play_music(track: int, rpi_name: str = None):
+    if rpi_name is not None:
+        game_server.send_message(f'{rpi_name}:play:{track};')
+        return
     for rpi in settings.tracks_number_rsb[track]:
-        game_server.send_message(f'{rpi}:play:{track};')
+        game_server.send_message(f'r{rpi}:play:{track};')
 
 
-def pause_music(track: int):
+def pause_music(track: int, rpi_name: str = None):
+    if rpi_name is not None:
+        game_server.send_message(f'{rpi_name}:pause:{track};')
+        return
     for rpi in settings.tracks_number_rsb[track]:
-        game_server.send_message(f'{rpi}:pause:{track};')
+        game_server.send_message(f'r{rpi}:pause:{track};')
 
 
-def stop_music(track: int):
+def stop_music(track: int, rpi_name: str = None):
+    if rpi_name is not None:
+        game_server.send_message(f'{rpi_name}:stop:{track};')
+        return
     if track == -1:
         game_server.send_message(f'r1:stop:{track};')
         game_server.send_message(f'r2:stop:{track};')
         game_server.send_message(f'r3:stop:{track};')
     else:
         for rpi in settings.tracks_number_rsb[track]:
-            game_server.send_message(f'{rpi}:stop:{track};')
+            game_server.send_message(f'r{rpi}:stop:{track};')
 
 
 def change_volume(rpi: str, volume: int):
@@ -1616,11 +1652,17 @@ def play_into():
         intro_event, start_t, end_t = intro_event
         intro_event(start_t, end_t)
 
-def play_animator_pult(dt):
+@timer_wrapper
+def play_animator_pult(to_start: int, to_end: int):
+    while True:
+        if to_start <= 0:
+            break
+        to_start -= 0.1
+        time.sleep(0.1)
     reset_out('r3:y1', 1)
     while True:
-        dt -= 0.1
-        time.sleep(0.1)
-        if dt <= 0:
+        if to_end <= 0:
             break
+        to_end -= 0.1
+        time.sleep(0.1)
     reset_out('r3:y1', 0)

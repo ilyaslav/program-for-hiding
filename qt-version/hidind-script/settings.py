@@ -31,6 +31,7 @@ for_kids = False
 bonus_time = 1
 runstop = False
 start_run_time = -1
+start_run_time_pult = -1
 fans_run_time = [0, 0, 0, 0]
 fan_strobe = False
 staticUV = [False, False, False, False, False, False, False, False, False]
@@ -90,11 +91,14 @@ inputs = {
     "r2:x40": False,
     "r3:x1": False,
     "r3:x2": False,
+    "r3:x3": False,
     "r3:x40": False,
 }
 
 game_status = False
 start_button_release = True
+game_status_pult = False
+start_button_release_pult = True
 
 uv_event = False
 strobe_event = False
