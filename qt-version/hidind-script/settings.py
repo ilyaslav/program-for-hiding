@@ -9,6 +9,7 @@ tracks_number_rsb = db.select_tracks_key_number()
 
 timer_status = True
 scripts = 0
+last_time = "10:00"
 timer = "10:00"
 time = "10:00"
 time_m = 10

@@ -226,7 +226,6 @@ class MyWindow(Ui_MainWindow):
 
         if settings.end_timer_event:
             settings.end_timer_event = False
-            self.reset_time()
             self.disabling_buttons()
             self.reset_bt_colors()
             self.ping.start_blinker.start()
@@ -578,11 +577,9 @@ class MyWindow(Ui_MainWindow):
             game.action_shadow_lamp(0)
 
         if settings.runstop:
-            game.play_end_music()
             self.ping.start_blinker.start()
         else:
             self.ping.stop_events()
-        game.set_standart_outs()
         game.action_runstop_lamp(0)
 
         settings.runstop = not settings.runstop
@@ -828,6 +825,7 @@ class MyWindow(Ui_MainWindow):
             else:
                 s1 = str(settings.time_s)
             settings.time = f"{m1}:{s1}"
+            settings.last_time = settings.time
         except Exception as e:
             settings.time_m = 10
             settings.time_s = 0
