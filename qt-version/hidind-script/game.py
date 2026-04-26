@@ -1408,8 +1408,8 @@ def music_play(dt):
             play_shadow_music(11)
 
         elif settings.scripts == 2:
-            play_music(16)
-            play_shadow_music(120)
+            play_music(131)
+            play_shadow_music(83)
 
 @thread_wraper
 def play_shadow_music(dt=0):
